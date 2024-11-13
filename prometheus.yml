@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 5s  # Scrape metrics every 5 seconds
+
+scrape_configs:
+  - job_name: 'node-app-api'
+    static_configs:
+      - targets: ['192.168.1.6:7575']  # Target the Node.js service in Docker

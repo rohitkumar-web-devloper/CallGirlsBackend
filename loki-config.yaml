@@ -1,0 +1,45 @@
+server:
+  http_listen_port: 3100  # The HTTP port Loki listens on
+  grpc_listen_port: 9096  # gRPC port (if needed)
+
+auth_enabled: false  # Disable authentication
+
+# Storage Configuration
+storage_config:
+  boltdb_shipper:
+    active_index_directory: /loki/index
+    cache_location: /loki/cache
+    # shared_store: filesystem
+  filesystem:
+    directory: /loki/chunks  # Where Loki stores the chunk data
+
+compactor:
+  working_directory: /loki/compactor
+
+schema_config:
+  configs:
+    - from: 2020-10-15
+      store: boltdb
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 168h  # Retention period for the index
+
+limits_config:
+  max_query_length: 72h
+  # max_samples_per_query: 1000000  # Use max_samples_per_query instead of max_streams_per_query
+
+table_manager:
+  retention_deletes_enabled: false
+  retention_period: 0s
+
+# Optional: Query Configs
+query_range:
+  results_cache:
+    # enabled: true
+    # expiration: 5m
+  # parallelism: 4
+  max_retries: 5
+  cache_results: true
+  # preemptive_cache_size: 10000
