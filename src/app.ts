@@ -6,3 +6,4 @@ app.use(express.json());
 app.use(express.static("assets"));
 app.use(morgan("dev"));
 export default app;
+
