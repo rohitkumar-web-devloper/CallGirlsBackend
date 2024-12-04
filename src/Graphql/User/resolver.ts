@@ -3,11 +3,16 @@ import { IResolvers } from "@graphql-tools/utils"; // or '@apollo/server'
 import { UserAttributes } from "../../models/user"
 import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
 import { Model } from "sequelize";
+import { Op } from "sequelize";
 const User: IResolvers<any, any> = {
   Query: {
-    users: async (_: any, { name }: UserAttributes) => {
-      const where = { name }
-      return await db.User.findAll({ where: where });
+    users: async (_: any, __: any, context: any) => {
+      const { user } = context;
+
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+      return await db.User.findAll({});
     },
     user: async (_: any, { id }: UserAttributes) => {
       return await db.User.findOne({
@@ -18,21 +23,16 @@ const User: IResolvers<any, any> = {
     },
   },
   Mutation: {
-    loginUser: async (_: any, { email, password }: UserAttributes) => {
+    loginUser: async (_: any, {email, password }: UserAttributes) => {
       const exist = await db.User.findOne({ where: { email } }) as UserAttributes | null
       if (exist) {
         if (await passwordCompare(password, exist.password)) {
           return { message: "Password not match", success: false, }
         }
-        exist.token = await generateToken({ email });
+        exist.token = await generateToken({ id: exist.id, name: exist.name });
         await exist.save();
         return { message: "User Login Successfully", success: true, ...exist.dataValues }
-      } else {
-        const encrypPass = await passwordEncrypt(password)
-        const token = await generateToken({ email });
-        const user = await db.User.create({ email, password: encrypPass, token});
-        return { message: "User Register Successfully", success: true, ...user.dataValues }
-      }
+      } 
     },
     createUser: async (
       _: any,

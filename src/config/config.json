@@ -1,25 +1,25 @@
 {
   "development": {
     "username": "root",
-    "password": "pass123",
-    "database": "docker",
-    "host": "mysql-db",
+    "password": "",
+    "database": "call",
+    "host": "localhost",
     "dialect": "mysql",
     "logging": false
   },
   "test": {
     "username": "root",
-    "password": "pass123",
-    "database": "docker",
-    "host": "mysql-db",
+    "password": "",
+    "database": "call",
+    "host": "localhost",
     "dialect": "mysql",
     "logging": false
   },
   "production": {
     "username": "root",
-    "password": "pass123",
-    "database": "docker",
-    "host": "mysql-db",
+    "password": "",
+    "database": "call",
+    "host": "localhost",
     "dialect": "mysql",
     "logging": false
   }

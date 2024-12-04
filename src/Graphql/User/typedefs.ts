@@ -13,7 +13,7 @@ const userDefs = gql`
 
   }
   type Query {
-    users(name:String): [User] 
+    users: [User] 
     user(id: ID!): User
   }
 

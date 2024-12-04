@@ -21,17 +21,12 @@
     "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
     "jsonwebtoken": "^9.0.2",
-    "kafkajs": "^2.2.4",
     "morgan": "^1.10.0",
     "mysql2": "^3.11.3",
-    "prom-client": "^15.1.3",
-    "redis": "^4.7.0",
     "require-dir": "^1.2.0",
-    "response-time": "^2.3.3",
     "sequelize": "^6.37.4",
     "sequelize-typescript": "^2.1.6",
-    "winston": "^3.16.0",
-    "winston-loki": "^6.1.3"
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

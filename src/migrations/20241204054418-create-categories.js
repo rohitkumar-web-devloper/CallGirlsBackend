@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Students', {
+    await queryInterface.createTable('Categories', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,14 +12,15 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      email: {
+      createdById: {
+        type: Sequelize.INTEGER
+      },
+      createdByName: {
         type: Sequelize.STRING
       },
-      degree: {
-        type: Sequelize.STRING
-      },
-      age: {
-        type: Sequelize.STRING
+      status: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +33,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Students');
+    await queryInterface.dropTable('Categories');
   }
 };

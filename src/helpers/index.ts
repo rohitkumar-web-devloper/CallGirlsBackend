@@ -13,7 +13,8 @@ interface Image {
 }
 
 interface TokenPayload {
-  email: string;
+  id:any
+  name:string
 }
 // Type for the file path parameter
 type FilePath = string;
