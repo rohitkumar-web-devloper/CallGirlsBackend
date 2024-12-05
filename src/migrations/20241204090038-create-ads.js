@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      catergory: {
+      category: {
         type: Sequelize.STRING
       },
       categoryId: {
@@ -59,6 +59,12 @@ module.exports = {
       },
       pricePerHour: {
         type: Sequelize.STRING
+      },
+      createdById: {
+        type: Sequelize.INTEGER,
+      },
+      createdByName: {
+        type: Sequelize.STRING,
       },
       services: {
         type: Sequelize.JSON

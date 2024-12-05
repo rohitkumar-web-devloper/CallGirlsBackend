@@ -1,31 +1,33 @@
 import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
 
 // Define the attributes for the Ads model
-interface AdsAttributes {
-  id: number
-  category: string
-  categoryId: number
-  city: string
-  district: string
-  address: string
-  zip: string
-  age: string
-  title: string
-  description: string
-  mobileNumber: string
-  whatsAppNumber: string
-  ethnicity: string
-  nationality: string
-  breast: string
-  hair: string
-  bodyType: string
-  pricePerHour: string
-  services: string[]
-  attentionTo: string[]
-  profile: string[]
-  placeOfService: string[]
-  paymentMethod: string[]
-
+export interface AdsAttributes {
+  [x: string]: any;
+  id: number;
+  category: string;
+  categoryId: number;
+  city: string;
+  district: string;
+  address: string;
+  zip: string;
+  age: string;
+  title: string;
+  description: string;
+  mobileNumber: string;
+  whatsAppNumber: string;
+  ethnicity: string;
+  nationality: string;
+  breast: string;
+  hair: string;
+  bodyType: string;
+  pricePerHour: string;
+  createdById: number
+  createdByName: string
+  services: string[];
+  attentionTo: string[];
+  profile: string[];
+  placeOfService: string[];
+  paymentMethod: string[];
 }
 
 // Optional fields for model creation
@@ -51,6 +53,8 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
   public hair!: string;
   public bodyType!: string;
   public pricePerHour!: string;
+  public createdById!: number
+  public createdByName!: string
   public services!: string[];
   public attentionTo!: string[];
   public profile!: string[];
@@ -61,10 +65,9 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  // Associations
   static associate(models: any) {
-    // Define associations here, e.g.,
-    // Ads.belongsTo(models.SomeModel);
+    // Define associations here
+    // Ads.belongsTo(models.SomeOtherModel);
   }
 
   static initModel(sequelize: Sequelize): typeof Ads {
@@ -93,53 +96,61 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
         },
         address: {
           type: DataTypes.TEXT,
-          allowNull: false
+          allowNull: false,
         },
         zip: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
         },
         age: {
-          type: DataTypes.STRING
+          type: DataTypes.STRING,
         },
         title: {
           type: DataTypes.TEXT,
-          allowNull: false
+          allowNull: false,
         },
         description: {
           type: DataTypes.TEXT,
-          allowNull: false
+          allowNull: false,
         },
         mobileNumber: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
         },
         whatsAppNumber: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
         },
         ethnicity: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
         },
         nationality: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
         },
         breast: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
         },
         hair: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
         },
         bodyType: {
           type: DataTypes.STRING,
-          allowNull: false
+          allowNull: false,
         },
         pricePerHour: {
-          type: DataTypes.STRING
+          type: DataTypes.STRING,
+        },
+        createdById: {
+          type: DataTypes.INTEGER,
+          allowNull: false
+        },
+        createdByName: {
+          type: DataTypes.STRING,
+          allowNull: false
         },
         services: {
           type: DataTypes.JSON,
@@ -165,8 +176,8 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
       {
         sequelize,
         modelName: 'Ads',
-        tableName: 'ads', // Optional: specify the table name if it differs
-        timestamps: true, // Enable createdAt and updatedAt
+        tableName: 'ads',
+        timestamps: true,
       }
     );
     return Ads;

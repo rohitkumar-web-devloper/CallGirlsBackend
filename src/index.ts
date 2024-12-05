@@ -8,7 +8,6 @@ import createApolloGraphQlServer from "./Graphql";
 import authMiddleware from "./Middleware/atuh";
 // Load routes and controllers
 requireDir("./routes");
-requireDir("./controllers", { recurse: true });
 // Basic routes
 app.get("/", (req, res) => {
   res.send("<center><h2>Welcome to Developer world...Ram</h2></center>");
