@@ -2,6 +2,7 @@ import db from "../../models";
 import { IResolvers } from "@graphql-tools/utils"; // or '@apollo/server'
 import { UserAttributes } from "../../models/user"
 import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
+import { ApolloError } from 'apollo-server';
 const User: IResolvers<any, any> = {
   Query: {
     users: async (_: any, __: any, context: any) => {
@@ -21,11 +22,12 @@ const User: IResolvers<any, any> = {
     },
   },
 
-
   Mutation: {
     loginUser: async (_: any, { email, password }: UserAttributes) => {
       const exist: any = await db.User.findOne({ where: { email } })
-      if (exist) {
+      if (!exist) {
+        throw new ApolloError("User does not exist", "USER_NOT_FOUND");
+      } else {
         if (await passwordCompare(password, exist.password)) {
           return { message: "Password not match", success: false, }
         }
