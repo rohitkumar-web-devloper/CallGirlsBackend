@@ -23,7 +23,7 @@ const User: IResolvers<any, any> = {
     },
   },
   Mutation: {
-    loginUser: async (_: any, {email, password }: UserAttributes) => {
+    loginUser: async (_: any, { email, password }: UserAttributes) => {
       const exist = await db.User.findOne({ where: { email } }) as UserAttributes | null
       if (exist) {
         if (await passwordCompare(password, exist.password)) {
