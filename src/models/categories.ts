@@ -1,73 +1,72 @@
-'use strict';
 import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
 
-// Define the attributes of the model
+// Define the attributes for the Categories model
 export interface CategoriesAttributes {
-  [x: string]: any;
-  id: number; // Primary key (optional, depending on your setup)
+  id: number;
   name: string;
   createdById: number;
   createdByName: string;
-  status: boolean
+  status: boolean;
 }
 
-// Define optional attributes for creation (e.g., ID might be auto-generated)
-interface CategoriesCreationAttributes extends Optional<CategoriesAttributes, 'id'> { }
+// Optional fields for model creation
+type CategoriesCreationAttributes = Optional<CategoriesAttributes, 'id'>;
 
-// Define the model class
-class Categories extends Model<CategoriesAttributes, CategoriesCreationAttributes>
-  implements CategoriesAttributes {
+// Define the Categories model class
+class Categories extends Model<CategoriesAttributes, CategoriesCreationAttributes> implements CategoriesAttributes {
   public id!: number;
   public name!: string;
   public createdById!: number;
   public createdByName!: string;
-  public status!: boolean
+  public status!: boolean;
 
-  // Timestamps (optional, add if your table includes these)
+  // Timestamps
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
   static associate(models: any) {
     // Define associations here
+    // Categories.hasMany(models.SomeOtherModel, { foreignKey: 'categoryId', as: 'relatedModels' });
+  }
+
+  static initModel(sequelize: Sequelize): typeof Categories {
+    Categories.init(
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          validate: {
+            len: [2, 255], // Length validation: name must be between 2 and 255 characters
+          },
+        },
+        createdById: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        createdByName: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        status: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+        },
+      },
+      {
+        sequelize,
+        modelName: 'Categories',
+        tableName: 'categories',
+        timestamps: true, // Include createdAt and updatedAt
+        underscored: true, // Use snake_case for column names in the database
+      }
+    );
+    return Categories;
   }
 }
 
-// Initialize the model
-export default (sequelize: Sequelize): typeof Categories => {
-  Categories.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          max: 2
-        },
-      },
-      createdById: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      createdByName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      status: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-      },
-    },
-    {
-      sequelize,
-      modelName: 'Categories',
-      tableName: 'categories', // Specify table name if it differs
-      timestamps: true, // Include createdAt and updatedAt
-    }
-  );
-
-  return Categories;
-};
+export default Categories;

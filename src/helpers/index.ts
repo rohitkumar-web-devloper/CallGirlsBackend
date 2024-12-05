@@ -39,7 +39,7 @@ const passwordCompare = async (password: string, encryptedPassword: string): Pro
 }
 
 // Function to generate a JWT token
-const generateToken = async (payload:TokenPayload): Promise<string> => {
+const generateToken = async (payload:any): Promise<string> => {
   if (!TOKEN_KEY) {
     throw new Error("TOKEN_KEY is not defined");
   }

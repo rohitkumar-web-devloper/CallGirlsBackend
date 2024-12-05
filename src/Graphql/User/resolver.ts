@@ -2,8 +2,6 @@ import db from "../../models";
 import { IResolvers } from "@graphql-tools/utils"; // or '@apollo/server'
 import { UserAttributes } from "../../models/user"
 import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
-import { Model } from "sequelize";
-import { Op } from "sequelize";
 const User: IResolvers<any, any> = {
   Query: {
     users: async (_: any, __: any, context: any) => {
@@ -22,9 +20,11 @@ const User: IResolvers<any, any> = {
       });
     },
   },
+
+
   Mutation: {
     loginUser: async (_: any, { email, password }: UserAttributes) => {
-      const exist = await db.User.findOne({ where: { email } }) as UserAttributes | null
+      const exist: any = await db.User.findOne({ where: { email } })
       if (exist) {
         if (await passwordCompare(password, exist.password)) {
           return { message: "Password not match", success: false, }
@@ -32,20 +32,18 @@ const User: IResolvers<any, any> = {
         exist.token = await generateToken({ id: exist.id, name: exist.name });
         await exist.save();
         return { message: "User Login Successfully", success: true, ...exist.dataValues }
-      } 
+      }
     },
-    createUser: async (
-      _: any,
-      { name, email }: { name: string; email: string }
-    ) => {
-      const user = db.User.create({ name, email });
+    createUser: async (_: any, { name, email, password }: UserAttributes) => {
+      console.log(name, email, password);
+      const user = await db.User.create({ name, email, password: await passwordEncrypt(password) });
       return user;
     },
     updateUser: async (
       _: any,
       { id, name, email }: UserAttributes
     ) => {
-      const exist = await db.User.findOne({ where: { id } }) as UserAttributes | null
+      const exist: any = await db.User.findOne({ where: { id } })
       if (exist) {
         exist.name = name
         exist.email = email
@@ -56,7 +54,7 @@ const User: IResolvers<any, any> = {
       }
     },
     deleteUser: async (_: any, { id }: { id: string }) => {
-      const exist = await db.User.findOne({ where: { id } }) as UserAttributes | null
+      const exist: any = await db.User.findOne({ where: { id } })
       if (exist) {
         const result = await db.User.destroy({ where: { id } })
         if (result)
@@ -69,7 +67,4 @@ const User: IResolvers<any, any> = {
 };
 
 export default User;
-function tokenGenerate(user: Model<any, any>): any {
-  throw new Error("Function not implemented.");
-}
 
