@@ -33,12 +33,12 @@ const Categories: IResolvers<any, any> = {
             }
             const exist = await db.Categories.findOne({
                 where: {
-                    name:data.name
+                    name: data.name
                 }
             })
             if (exist)
                 return { message: 'Already Exist', success: false };
-            const category = await db.Categories.create({ ...data, createdById: user.id, createdByName: "Ram" });
+            const category = await db.Categories.create({ ...data, createdById: user.id, createdByName: user.name });
             return { ...category.dataValues, message: 'Category Created', success: true };
         },
         updateCategories: async (_: any, { id, name }: CategoriesAttributes, context: any) => {
