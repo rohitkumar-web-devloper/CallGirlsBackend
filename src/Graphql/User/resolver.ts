@@ -3,15 +3,21 @@ import { IResolvers } from "@graphql-tools/utils"; // or '@apollo/server'
 import { UserAttributes } from "../../models/user"
 import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
 import { ApolloError } from 'apollo-server';
+const { Op } = require("sequelize");
 const User: IResolvers<any, any> = {
   Query: {
     users: async (_: any, __: any, context: any) => {
       const { user } = context;
-
       if (!user) {
         throw new Error("Unauthorized");
       }
-      return await db.User.findAll({});
+      return await db.User.findAll({
+        where: {
+          id: {
+            [Op.ne]: user.id,
+          }
+        }
+      });
     },
     user: async (_: any, { id }: UserAttributes) => {
       return await db.User.findOne({
@@ -41,8 +47,8 @@ const User: IResolvers<any, any> = {
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
-      console.log(data,'---');
-      
+      console.log(data, '---');
+
       const result = await db.User.create({ ...data, password: await passwordEncrypt(data.password) });
       return result;
     },

@@ -8,21 +8,11 @@ import createApolloGraphQlServer from './Graphql';
 import authMiddleware from './Middleware/atuh';
 import cors from 'cors'
 app.use(cors({
-  origin: "*", // Replace with the allowed origin(s)
-  methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-  credentials: true // Allow credentials (cookies, etc.)
+  origin: "*", 
+  methods: ["GET", "POST", "PUT", "DELETE"], 
+  allowedHeaders: ["Content-Type", "Authorization"], 
+  credentials: true 
 }));
-
-// Load routes and controllers
-requireDir("./routes");
-// Basic routes
-app.get('/', (req, res) => {
-  res.send('<center><h2>Welcome to Developer world...Ram</h2></center>');
-});
-app.get('/dude', (req, res) => {
-  res.json({ type: 'success', name: 'Rohit' });
-});
 // GraphQL connection setup
 const startServer = async () => {
   app.use(
