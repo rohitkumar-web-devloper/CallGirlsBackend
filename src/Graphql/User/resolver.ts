@@ -3,7 +3,7 @@ import { IResolvers } from "@graphql-tools/utils"; // or '@apollo/server'
 import { UserAttributes } from "../../models/user"
 import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
 import { ApolloError } from 'apollo-server';
-const { Op } = require("sequelize");
+import { Op } from "sequelize";
 const User: IResolvers<any, any> = {
   Query: {
     users: async (_: any, __: any, context: any) => {
