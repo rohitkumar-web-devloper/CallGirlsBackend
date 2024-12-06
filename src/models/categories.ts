@@ -55,6 +55,7 @@ class Categories extends Model<CategoriesAttributes, CategoriesCreationAttribute
         status: {
           type: DataTypes.BOOLEAN,
           defaultValue: false,
+          allowNull: false
         },
       },
       {
@@ -62,7 +63,6 @@ class Categories extends Model<CategoriesAttributes, CategoriesCreationAttribute
         modelName: 'Categories',
         tableName: 'categories',
         timestamps: true, // Include createdAt and updatedAt
-        underscored: true, // Use snake_case for column names in the database
       }
     );
     return Categories;

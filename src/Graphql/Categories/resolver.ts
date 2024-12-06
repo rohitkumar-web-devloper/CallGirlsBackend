@@ -26,20 +26,20 @@ const Categories: IResolvers<any, any> = {
     },
 
     Mutation: {
-        createCategories: async (_: any, { name }: CategoriesAttributes, context: any) => {
+        createCategories: async (_: any, data: CategoriesAttributes, context: any) => {
             const { user } = context;
             if (!user) {
                 throw new Error("Unauthorized");
             }
-            console.log(db,"--------");
+            console.log(data , user,";;;;;;");
             const exist = await db.Categories.findOne({
                 where: {
-                    name
+                    name:data.name
                 }
             })
             if (exist)
                 return { message: 'Already Exist', success: false };
-            const category = await db.Categories.create({ name, createdById: user.id, createdByName: "Ram" });
+            const category = await db.Categories.create({ ...data, createdById: user.id, createdByName: "Ram" });
             return { ...category.dataValues, message: 'Category Created', success: true };
         },
         updateCategories: async (_: any, { id, name }: CategoriesAttributes, context: any) => {
