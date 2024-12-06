@@ -9,11 +9,7 @@ const Categories: IResolvers<any, any> = {
             if (!user) {
                 throw new Error("Unauthorized");
             }
-            return await db.Categories.findAll({
-                where: {
-                    status: true
-                }
-            });
+            return await db.Categories.findAll();
         },
         category: async (_: any, { id }: CategoriesAttributes) => {
             const data: any = await db.Categories.findOne({
@@ -69,7 +65,7 @@ const Categories: IResolvers<any, any> = {
                 where: { id }
             })
             if (!exist)
-                return { message: "Category is not exist", success: false }
+                throw new ApolloError("Category does not exist", "Category does not exist");
 
             const cat: any = await db.Categories.destroy({
                 where: { id },
