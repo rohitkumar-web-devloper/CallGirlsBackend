@@ -3,6 +3,7 @@ const categoriesDef = gql`
   type Category {
     id: ID
     name: String
+    status:String
     createdById: Int
     createdByName:String
     createdAt: String
