@@ -1,6 +1,7 @@
 import db from "../../models";
 import { IResolvers } from "@graphql-tools/utils";
 import { CategoriesAttributes } from '../../models/categories'
+import { ApolloError } from "apollo-server";
 const Categories: IResolvers<any, any> = {
     Query: {
         categories: async (_: any, __: any, context: any) => {
@@ -37,7 +38,7 @@ const Categories: IResolvers<any, any> = {
                 }
             })
             if (exist)
-                return { message: 'Already Exist', success: false };
+                throw new ApolloError("Already Exist", "Already Exist");
             const category = await db.Categories.create({ ...data, createdById: user.id, createdByName: user.name });
             return { ...category.dataValues, message: 'Category Created', success: true };
         },
