@@ -19,7 +19,7 @@ const categoriesDef = gql`
 
   type Mutation {
     createCategories(name: String , status:Boolean = false): Category
-    updateCategories(id: ID!, name: String): Category
+    updateCategories(id: ID!, name: String , status:Boolean): Category
     deleteCategories(id: ID!): Category
   }
 `;

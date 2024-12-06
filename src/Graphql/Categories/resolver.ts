@@ -42,7 +42,7 @@ const Categories: IResolvers<any, any> = {
             const category = await db.Categories.create({ ...data, createdById: user.id, createdByName: user.name });
             return { ...category.dataValues, message: 'Category Created', success: true };
         },
-        updateCategories: async (_: any, { id, name }: CategoriesAttributes, context: any) => {
+        updateCategories: async (_: any, { id, name, status }: CategoriesAttributes, context: any) => {
             const { user } = context;
             if (!user) {
                 throw new Error("Unauthorized");
@@ -51,11 +51,12 @@ const Categories: IResolvers<any, any> = {
                 where: { id },
             })
             if (!exist) {
-                return { message: "Category does not exist", success: false };
+                throw new ApolloError("Category does not exist", "Category does not exist");
             }
             exist.name = name;
+            exist.status = status;
             exist.createdById = user.id;
-            exist.createdByName = "ram";
+            exist.createdByName = user.name;
             await exist.save();
             return { ...exist.dataValues, message: "Category Updated", success: true };
         },
