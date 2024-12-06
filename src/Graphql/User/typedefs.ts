@@ -1,13 +1,14 @@
 import { gql } from "graphql-tag";
 const userDefs = gql`
+scalar DateTime
   type User {
     id: ID
     name: String
     email: String
     password:String
     token:String
-    createdAt: String
-    updatedAt: String
+    createdAt: DateTime
+    updatedAt: DateTime
     message:String
     success:Boolean
 

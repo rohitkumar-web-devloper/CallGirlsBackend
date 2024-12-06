@@ -1,7 +1,9 @@
 import { gql } from "graphql-tag";
 
 const adsDef = gql`
+scalar DateTime
   type Ads {
+
     id: ID
     category: String
     categoryId: Int
@@ -27,8 +29,8 @@ const adsDef = gql`
     profile: [String]
     placeOfService: [String]
     paymentMethod: [String]
-    createdAt: String
-    updatedAt: String
+    createdAt: DateTime
+    updatedAt: DateTime
     message: String
     success: Boolean
   }

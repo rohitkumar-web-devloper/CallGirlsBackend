@@ -1,13 +1,14 @@
 import { gql } from "graphql-tag";
 const categoriesDef = gql`
+  scalar DateTime
   type Category {
     id: ID
     name: String
     status:Boolean
     createdById: Int
     createdByName:String
-    createdAt: String
-    updatedAt: String
+    createdAt: DateTime
+    updatedAt: DateTime
     message: String
     success:Boolean
   }
