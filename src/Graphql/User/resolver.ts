@@ -35,7 +35,7 @@ const User: IResolvers<any, any> = {
         throw new ApolloError("User does not exist", "USER_NOT_FOUND");
       } else {
         if (!await passwordCompare(password, exist.password)) {
-          return { message: "Password not match", success: false, }
+          throw new ApolloError("Password not match", "Password not match");
         }
         exist.token = await generateToken({ id: exist.id, name: exist.name });
         await exist.save();

@@ -31,7 +31,6 @@ const Categories: IResolvers<any, any> = {
             if (!user) {
                 throw new Error("Unauthorized");
             }
-            console.log(data , user,";;;;;;");
             const exist = await db.Categories.findOne({
                 where: {
                     name:data.name
