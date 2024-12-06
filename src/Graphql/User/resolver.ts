@@ -28,7 +28,7 @@ const User: IResolvers<any, any> = {
       if (!exist) {
         throw new ApolloError("User does not exist", "USER_NOT_FOUND");
       } else {
-        if (await passwordCompare(password, exist.password)) {
+        if (!await passwordCompare(password, exist.password)) {
           return { message: "Password not match", success: false, }
         }
         exist.token = await generateToken({ id: exist.id, name: exist.name });
@@ -41,6 +41,8 @@ const User: IResolvers<any, any> = {
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
+      console.log(data,'---');
+      
       const result = await db.User.create({ ...data, password: await passwordEncrypt(data.password) });
       return result;
     },
