@@ -4,29 +4,71 @@ import { UserAttributes } from "../../models/user"
 import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
 import { ApolloError } from 'apollo-server';
 import { Op } from "sequelize";
+import { upload } from "../../MulterConfig";
+
 const User: IResolvers<any, any> = {
-  Query: {
-    users: async (_: any, __: any, context: any) => {
-      const { user } = context;
-      if (!user) {
-        throw new Error("Unauthorized");
+  
+ 
+Query: {
+  users: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
+    const { user } = context;
+
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+
+    const whereConditions: any = {
+      id: {
+        [Op.ne]: user.id,
+      },
+    };
+
+    // Apply filtering conditions if filter is provided
+    if (filter) {
+      if (filter.name) {
+        whereConditions.name = {
+          [Op.like]: `%${filter.name}%`,  // Example filter for name (case-insensitive)
+        };
       }
-      return await db.User.findAll({
-        where: {
-          id: {
-            [Op.ne]: user.id,
-          }
-        }
-      });
-    },
-    user: async (_: any, { id }: UserAttributes) => {
-      return await db.User.findOne({
-        where: {
-          id,
-        },
-      });
-    },
+      if (filter.email) {
+        whereConditions.email = {
+          [Op.like]: `%${filter.email}%`,  // Example filter for email
+        };
+      }
+      // Add more filter conditions as needed
+    }
+
+    // Calculate pagination offset
+    const offset = (page - 1) * pageSize;
+
+    const users = await db.User.findAll({
+      where: whereConditions,
+      limit: pageSize,
+      offset,
+    });
+
+    // You can also return additional metadata for pagination, like total count
+    const totalCount = await db.User.count({
+      where: whereConditions,
+    });
+
+    return {
+      users,
+      totalCount,
+      page,
+      pageSize,
+      totalPages: Math.ceil(totalCount / pageSize),
+    };
   },
+  user: async (_: any, { id }: UserAttributes) => {
+    return await db.User.findOne({
+      where: {
+        id,
+      },
+    });
+  },
+},
+
 
   Mutation: {
     loginUser: async (_: any, { email, password }: UserAttributes) => {
@@ -47,7 +89,7 @@ const User: IResolvers<any, any> = {
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
-      console.log(data, '---');
+      console.log(data, '--user-');
 
       const result = await db.User.create({ ...data, password: await passwordEncrypt(data.password) });
       return result;

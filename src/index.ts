@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import app from './app';
 import { PORT } from './constants/Variables';
-import requireDir from 'require-dir';
+import { } from "graphql-upload";
 import { expressMiddleware } from '@apollo/server/express4';
 import createApolloGraphQlServer from './Graphql';
 import authMiddleware from './Middleware/atuh';
@@ -13,6 +13,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"], 
   credentials: true 
 }));
+// app.use(graphqlUploadExpress());
 // GraphQL connection setup
 const startServer = async () => {
   app.use(

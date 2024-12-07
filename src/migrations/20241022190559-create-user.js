@@ -17,8 +17,11 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
-      token:{
-        type:Sequelize.STRING
+      token: {
+        type: Sequelize.STRING
+      },
+      profile: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

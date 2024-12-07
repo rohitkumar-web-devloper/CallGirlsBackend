@@ -10,8 +10,9 @@ async function createApolloGraphQlServer() {
   const gqlServer = new ApolloServer({
     typeDefs: [userDefs, categoriesDef ,adsDef],
     resolvers: [User, Categories ,Ads],
+    csrfPrevention: false, 
   });
-
+  
   await gqlServer.start();
   return gqlServer;
 }

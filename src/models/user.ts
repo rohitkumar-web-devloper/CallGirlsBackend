@@ -7,6 +7,7 @@ export interface UserAttributes {
   email: string;
   password: string;
   token: string;
+  profile: string
 }
 
 // Optional fields for model creation (e.g., ID might be auto-generated)
@@ -19,6 +20,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public email!: string;
   public password!: string;
   public token!: string;
+  public profile!: string
 
   // Timestamps
   public readonly createdAt!: Date;
@@ -59,6 +61,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
         token: {
           type: DataTypes.STRING,
           allowNull: true, // Token can be nullable initially
+        },
+        profile: {
+          type: DataTypes.STRING
         },
       },
       {
