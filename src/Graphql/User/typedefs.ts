@@ -47,6 +47,7 @@ const userDefs = gql`
       email: String
       password: String
       status: Boolean
+      mobile:String
       profile: FileUpload
     ): User
     updateUser(id: ID!, name: String, email: String, status: Boolean , password:String , mobile:String): User

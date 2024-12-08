@@ -63,7 +63,7 @@ const User: IResolvers<any, any> = {
   },
   Mutation: {
     loginUser: async (_: any, { email, password }: UserAttributes) => {
-      const exist: any = await db.User.findOne({ where: { email } })
+      const exist: any = await db.User.findOne({ where: { email, status: true } })
       if (!exist) {
         throw new ApolloError("User does not exist", "USER_NOT_FOUND");
       } else {
