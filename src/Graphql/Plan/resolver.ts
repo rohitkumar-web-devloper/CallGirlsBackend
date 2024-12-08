@@ -14,12 +14,12 @@ const Plan: IResolvers<any, any> = {
       }
       const whereConditions: any = {};
 
-      if (filter) {
-        if (filter.description) {
-          whereConditions.description = {
-            [Op.like]: `%${filter.description}%`,
-          };
-        }
+
+      if (filter && filter.search) {
+        whereConditions[Op.or] = [
+          { name: { [Op.like]: `%${filter.search}%` } },
+          { description: { [Op.like]: `%${filter.search}%` } },
+        ];
       }
 
       const offset = (page - 1) * pageSize;
@@ -56,7 +56,7 @@ const Plan: IResolvers<any, any> = {
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
-      const result = await db.Plan.create({ ...data});
+      const result = await db.Plan.create({ ...data });
       return result
     },
     updatePlan: async (_: any, data: PlanAttributes, context: any) => {

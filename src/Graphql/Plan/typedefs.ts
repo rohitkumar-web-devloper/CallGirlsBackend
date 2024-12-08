@@ -27,7 +27,7 @@ const planDefs = gql`
   }
 
   input PlanFilter {
-    description: String
+    search: String
   }
 
   type Query {
