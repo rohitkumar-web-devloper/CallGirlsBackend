@@ -12,6 +12,7 @@ const userDefs = gql`
     token: String
     profile: String
     status: Boolean
+    mobile:String
     createdAt: DateTime
     updatedAt: DateTime
   }
@@ -25,8 +26,7 @@ const userDefs = gql`
   }
 
   input UserFilter {
-    name: String
-    email: String
+    search: String
   }
 
   type LogoutResponse {
@@ -49,7 +49,7 @@ const userDefs = gql`
       status: Boolean
       profile: FileUpload
     ): User
-    updateUser(id: ID!, name: String, email: String, status: Boolean): User
+    updateUser(id: ID!, name: String, email: String, status: Boolean , password:String , mobile:String): User
     deleteUser(id: ID!): User
   }
 `;

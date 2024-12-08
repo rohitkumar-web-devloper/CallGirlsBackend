@@ -5,6 +5,7 @@ export interface UserAttributes {
   id?: number;
   name: string;
   email: string;
+  mobile: string
   password: string;
   token: string;
   profile: string
@@ -19,6 +20,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public id!: number;
   public name!: string;
   public email!: string;
+  public mobile!: string;
   public password!: string;
   public token!: string;
   public profile!: string
@@ -56,6 +58,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
             isEmail: true, // Validate email format
           },
         },
+        mobile: {
+          type: DataTypes.STRING,
+          allowNull:false
+        },
         password: {
           type: DataTypes.STRING,
           allowNull: false,
@@ -69,7 +75,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
         },
         status: {
           type: DataTypes.BOOLEAN,
-          defaultValue:false
+          defaultValue: false
         },
       },
       {

@@ -1,10 +1,11 @@
 import db from "../../models";
-import { IResolvers } from "@graphql-tools/utils"; // or '@apollo/server'
+import { IResolvers } from "@graphql-tools/utils";
 import { UserAttributes } from "../../models/user"
 import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
 import { ApolloError } from 'apollo-server';
 import { Op } from "sequelize";
 import { upload } from "../../MulterConfig";
+import { exit } from "process";
 
 const User: IResolvers<any, any> = {
   Query: {
@@ -22,14 +23,12 @@ const User: IResolvers<any, any> = {
       };
 
       if (filter) {
-        if (filter.name) {
+        if (filter.search) {
           whereConditions.name = {
-            [Op.like]: `%${filter.name}%`,
+            [Op.like]: `%${filter.search}%`,
           };
-        }
-        if (filter.email) {
           whereConditions.email = {
-            [Op.like]: `%${filter.email}%`,
+            [Op.like]: `%${filter.search}%`,
           };
         }
       }
@@ -97,6 +96,10 @@ const User: IResolvers<any, any> = {
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
+      const exist: any = await db.User.findOne({ where: { email: data.email } })
+      if (exist) {
+        throw new ApolloError("Email Already Exist", "Email Already Exist");
+      }
       const result = await db.User.create({ ...data, password: await passwordEncrypt(data.password) });
       return result;
     },
@@ -107,6 +110,10 @@ const User: IResolvers<any, any> = {
       }
       const exist: any = await db.User.findOne({ where: { id: data.id } })
       if (exist) {
+        if (data.password) {
+          exist.password = await passwordEncrypt(data.password)
+        }
+        exist.mobile = data.mobile
         exist.name = data.name
         exist.email = data.email
         exist.status = data.status
