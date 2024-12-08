@@ -10,11 +10,11 @@ const userDefs = gql`
     email: String
     password: String
     token: String
+    profile: String 
+    status:Boolean
     createdAt: DateTime
     updatedAt: DateTime
-    message: String
-    success: Boolean
-    profile: String # Profile field for uploaded files (URL or path)
+    
   }
 
   type PaginatedUsers {
@@ -41,9 +41,10 @@ const userDefs = gql`
       name: String
       email: String
       password: String
+      status:Boolean
       profile: FileUpload   
     ): User
-    updateUser(id: ID!, name: String, email: String): User
+    updateUser(id: ID!, name: String, email: String ,status: Boolean): User
     deleteUser(id: ID!): User
   }
 `;

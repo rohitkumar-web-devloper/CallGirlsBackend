@@ -20,7 +20,7 @@ const startServer = async () => {
     '/graphql',
     expressMiddleware(await createApolloGraphQlServer(), {
       context: async ({ req }) => {
-        const user = authMiddleware(req);
+        const user = await authMiddleware(req);
         return { user };
       },
     }),

@@ -23,6 +23,10 @@ module.exports = {
       profile: {
         type: Sequelize.STRING
       },
+      status: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

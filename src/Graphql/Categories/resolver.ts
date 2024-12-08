@@ -2,14 +2,43 @@ import db from "../../models";
 import { IResolvers } from "@graphql-tools/utils";
 import { CategoriesAttributes } from '../../models/categories'
 import { ApolloError } from "apollo-server";
+import { Op } from 'sequelize';
 const Categories: IResolvers<any, any> = {
     Query: {
-        categories: async (_: any, __: any, context: any) => {
+        categories: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
             const { user } = context;
             if (!user) {
                 throw new Error("Unauthorized");
             }
-            return await db.Categories.findAll();
+            const whereConditions: any = {};
+            if (filter) {
+                if (filter.name) {
+                    whereConditions.name = {
+                        [Op.like]: `%${filter.name}%`, 
+                    };
+                }
+                if (filter.status !== undefined) {
+                    whereConditions.status = filter.status; 
+                }
+            }
+            const offset = (page - 1) * pageSize;
+            const categories = await db.Categories.findAll({
+                where: whereConditions,
+                limit: pageSize,
+                offset,
+            });
+
+            const totalCount = await db.Categories.count({
+                where: whereConditions,
+            });
+
+            return {
+                categories,
+                totalCount,
+                page,
+                pageSize,
+                totalPages: Math.ceil(totalCount / pageSize),
+            };
         },
         category: async (_: any, { id }: CategoriesAttributes) => {
             const data: any = await db.Categories.findOne({

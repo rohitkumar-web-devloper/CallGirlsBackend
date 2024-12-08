@@ -8,6 +8,7 @@ export interface UserAttributes {
   password: string;
   token: string;
   profile: string
+  status: Boolean
 }
 
 // Optional fields for model creation (e.g., ID might be auto-generated)
@@ -21,6 +22,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public password!: string;
   public token!: string;
   public profile!: string
+  public status!: boolean
 
   // Timestamps
   public readonly createdAt!: Date;
@@ -64,6 +66,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
         },
         profile: {
           type: DataTypes.STRING
+        },
+        status: {
+          type: DataTypes.BOOLEAN,
+          defaultValue:false
         },
       },
       {

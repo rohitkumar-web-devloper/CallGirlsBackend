@@ -7,69 +7,61 @@ import { Op } from "sequelize";
 import { upload } from "../../MulterConfig";
 
 const User: IResolvers<any, any> = {
-  
- 
-Query: {
-  users: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
-    const { user } = context;
+  Query: {
+    users: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
+      const { user } = context;
 
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
-
-    const whereConditions: any = {
-      id: {
-        [Op.ne]: user.id,
-      },
-    };
-
-    // Apply filtering conditions if filter is provided
-    if (filter) {
-      if (filter.name) {
-        whereConditions.name = {
-          [Op.like]: `%${filter.name}%`,  // Example filter for name (case-insensitive)
-        };
+      if (!user) {
+        throw new Error("Unauthorized");
       }
-      if (filter.email) {
-        whereConditions.email = {
-          [Op.like]: `%${filter.email}%`,  // Example filter for email
-        };
+
+      const whereConditions: any = {
+        id: {
+          [Op.ne]: user.id,
+        },
+      };
+
+      if (filter) {
+        if (filter.name) {
+          whereConditions.name = {
+            [Op.like]: `%${filter.name}%`,
+          };
+        }
+        if (filter.email) {
+          whereConditions.email = {
+            [Op.like]: `%${filter.email}%`,
+          };
+        }
       }
-      // Add more filter conditions as needed
-    }
 
-    // Calculate pagination offset
-    const offset = (page - 1) * pageSize;
+      const offset = (page - 1) * pageSize;
 
-    const users = await db.User.findAll({
-      where: whereConditions,
-      limit: pageSize,
-      offset,
-    });
+      const users = await db.User.findAll({
+        where: whereConditions,
+        limit: pageSize,
+        offset,
+      });
 
-    // You can also return additional metadata for pagination, like total count
-    const totalCount = await db.User.count({
-      where: whereConditions,
-    });
+      const totalCount = await db.User.count({
+        where: whereConditions,
+      });
 
-    return {
-      users,
-      totalCount,
-      page,
-      pageSize,
-      totalPages: Math.ceil(totalCount / pageSize),
-    };
+      return {
+        users,
+        totalCount,
+        page,
+        pageSize,
+        totalPages: Math.ceil(totalCount / pageSize),
+      };
+    },
+    user: async (_: any, { id }: UserAttributes) => {
+      return await db.User.findOne({
+        where: {
+          id,
+        },
+      });
+    },
   },
-  user: async (_: any, { id }: UserAttributes) => {
-    return await db.User.findOne({
-      where: {
-        id,
-      },
-    });
-  },
-},
-
-
   Mutation: {
     loginUser: async (_: any, { email, password }: UserAttributes) => {
       const exist: any = await db.User.findOne({ where: { email } })
@@ -89,13 +81,11 @@ Query: {
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
-      console.log(data, '--user-');
-
       const result = await db.User.create({ ...data, password: await passwordEncrypt(data.password) });
       return result;
     },
     updateUser: async (_: any, data: UserAttributes, context: any) => {
-      const { user } = context;
+      const { user } =  context;
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
@@ -103,6 +93,7 @@ Query: {
       if (exist) {
         exist.name = data.name
         exist.email = data.email
+        exist.status = data.status
         await exist.save()
         return { ...exist.dataValues, message: 'User Updated', success: true }
       } else {
