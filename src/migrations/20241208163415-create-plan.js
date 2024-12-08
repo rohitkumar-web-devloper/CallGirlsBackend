@@ -9,9 +9,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      name: {
+        type: Sequelize.STRING
+      },
       image: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       description: {
         type: Sequelize.STRING,
@@ -26,7 +29,7 @@ module.exports = {
         allowNull: false,
       },
       timeSlots: {
-        type: Sequelize.JSON, // Use JSON to store array-like data
+        type: Sequelize.STRING,
         allowNull: false,
       },
       type: {
@@ -35,6 +38,7 @@ module.exports = {
       },
       status: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
       },
       createdAt: {

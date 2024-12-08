@@ -1,10 +1,8 @@
 import db from "../../models";
 import { IResolvers } from "@graphql-tools/utils";
 import { UserAttributes } from "../../models/user"
-import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
 import { ApolloError } from 'apollo-server';
 import { Op } from "sequelize";
-import { upload } from "../../MulterConfig";
 import { PlanAttributes } from '../../models/plan';
 
 const Plan: IResolvers<any, any> = {
@@ -58,8 +56,8 @@ const Plan: IResolvers<any, any> = {
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
-      const result = await db.Plan.create({ ...data, });
-      return result;
+      const result = await db.Plan.create({ ...data});
+      return result
     },
     updatePlan: async (_: any, data: PlanAttributes, context: any) => {
       const { user } = context;
@@ -74,6 +72,7 @@ const Plan: IResolvers<any, any> = {
         exist.timeSlots = data.timeSlots
         exist.type = data.type
         exist.status = data.status
+        exist.name = data.name
         await exist.save()
         return { ...exist.dataValues, message: 'Plan Updated', success: true }
       } else {

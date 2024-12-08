@@ -6,11 +6,12 @@ const planDefs = gql`
 
   type Plan {
     id: ID
+    name:String
     image: String
     description: String
     price: Int
     credits: Int
-    timeSlots: [Int] 
+    timeSlots: String
     type: String
     status: Boolean
     createdAt: DateTime
@@ -36,20 +37,22 @@ const planDefs = gql`
 
   type Mutation {
     createPlan(
+      name:String
       image: FileUpload
       description: String
       price: Int
       credits: Int
-      timeSlots: [Int] 
+      timeSlots: String
       type: String
       status: Boolean = false
     ): Plan
     updatePlan(
       id: ID!
+      name:String
       description: String
       price: Int
       credits: Int
-      timeSlots: [Int] 
+      timeSlots: String
       type: String
       status: Boolean
     ): Plan
