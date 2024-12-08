@@ -4,8 +4,6 @@ import { UserAttributes } from "../../models/user"
 import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
 import { ApolloError } from 'apollo-server';
 import { Op } from "sequelize";
-import { upload } from "../../MulterConfig";
-import { exit } from "process";
 
 const User: IResolvers<any, any> = {
   Query: {
@@ -22,20 +20,15 @@ const User: IResolvers<any, any> = {
         },
       };
 
-      if (filter) {
-        if (filter.search) {
-          whereConditions.name = {
-            [Op.like]: `%${filter.search}%`,
-          };
-          whereConditions.email = {
-            [Op.like]: `%${filter.search}%`,
-          };
-        }
+      if (filter && filter.search) {
+        whereConditions[Op.or] = [
+          { name: { [Op.like]: `%${filter.search}%` } },
+          { email: { [Op.like]: `%${filter.search}%` } },
+        ];
       }
 
       const offset = (page - 1) * pageSize;
 
-      console.log(whereConditions,"ppp");
       const users = await db.User.findAll({
         where: whereConditions,
         limit: pageSize,
