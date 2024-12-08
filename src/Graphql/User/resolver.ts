@@ -76,6 +76,22 @@ const User: IResolvers<any, any> = {
         return { message: "User Login Successfully", success: true, ...exist.dataValues }
       }
     },
+    logoutUser: async (_: any, { email, password }: UserAttributes, context: any) => {
+      const { user } = context;
+
+      if (!user) {
+        throw new Error("Unauthorized");
+      }
+
+      const exist: any = await db.User.findOne({ where: { id: user.id } })
+      if (!exist) {
+        throw new ApolloError("User does not exist", "USER_NOT_FOUND");
+      } else {
+        exist.token = ''
+        await exist.save()
+        return { message: "User Logut Successfully", success: true, }
+      }
+    },
     createUser: async (_: any, data: UserAttributes, context: any) => {
       const { user } = context;
       if (!user) {
@@ -85,7 +101,7 @@ const User: IResolvers<any, any> = {
       return result;
     },
     updateUser: async (_: any, data: UserAttributes, context: any) => {
-      const { user } =  context;
+      const { user } = context;
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }

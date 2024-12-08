@@ -10,11 +10,10 @@ const userDefs = gql`
     email: String
     password: String
     token: String
-    profile: String 
-    status:Boolean
+    profile: String
+    status: Boolean
     createdAt: DateTime
     updatedAt: DateTime
-    
   }
 
   type PaginatedUsers {
@@ -30,6 +29,11 @@ const userDefs = gql`
     email: String
   }
 
+  type LogoutResponse {
+    success: Boolean
+    message: String
+  }
+
   type Query {
     users(page: Int, pageSize: Int, filter: UserFilter): PaginatedUsers
     user(id: ID!): User
@@ -37,14 +41,15 @@ const userDefs = gql`
 
   type Mutation {
     loginUser(email: String, password: String): User
+    logoutUser: LogoutResponse
     createUser(
       name: String
       email: String
       password: String
-      status:Boolean
-      profile: FileUpload   
+      status: Boolean
+      profile: FileUpload
     ): User
-    updateUser(id: ID!, name: String, email: String ,status: Boolean): User
+    updateUser(id: ID!, name: String, email: String, status: Boolean): User
     deleteUser(id: ID!): User
   }
 `;
