@@ -5,14 +5,19 @@ import categoriesDef from "./Categories/typedefs";
 import Categories from "./Categories/resolver";
 import adsDef from "./Ads/typedefs";
 import Ads from "./Ads/resolver";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 
 async function createApolloGraphQlServer() {
-  const gqlServer = new ApolloServer({
-    typeDefs: [userDefs, categoriesDef ,adsDef],
-    resolvers: [User, Categories ,Ads],
-    csrfPrevention: false, 
+  const schema = makeExecutableSchema({
+    typeDefs: [userDefs, categoriesDef, adsDef],
+    resolvers: [User, Categories, Ads],
   });
-  
+
+  const gqlServer = new ApolloServer({
+    schema, // Provide the schema directly
+    csrfPrevention: false,
+  });
+
   await gqlServer.start();
   return gqlServer;
 }
