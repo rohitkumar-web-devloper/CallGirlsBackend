@@ -6,11 +6,11 @@ const planDefs = gql`
 
   type Plan {
     id: ID
-    image:String
+    image: String
     description: String
-    price: String
-    credits: String
-    timeSlots: Int[]
+    price: Int
+    credits: Int
+    timeSlots: [Int] 
     type: String
     status: Boolean
     createdAt: DateTime
@@ -29,7 +29,6 @@ const planDefs = gql`
     description: String
   }
 
-
   type Query {
     plans(page: Int, pageSize: Int, filter: PlanFilter): PaginatedPlans
     plan(id: ID!): Plan
@@ -40,14 +39,22 @@ const planDefs = gql`
       image: FileUpload
       description: String
       price: Int
-      credits:Int
-      timeSlots:Int[]
+      credits: Int
+      timeSlots: [Int] 
+      type: String
+      status: Boolean = false
+    ): Plan
+    updatePlan(
+      id: ID!
+      description: String
+      price: Int
+      credits: Int
+      timeSlots: [Int] 
       type: String
       status: Boolean
     ): Plan
-    updatePlan(id: ID!, description:String , price:Int, credits:Int , timeSlots:Int[] , type:String, status:Boolean): User
     deletePlan(id: ID!): Plan
-  } 
+  }
 `;
 
 export default planDefs;

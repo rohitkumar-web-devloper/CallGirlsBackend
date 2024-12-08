@@ -35,6 +35,7 @@ const User: IResolvers<any, any> = {
 
       const offset = (page - 1) * pageSize;
 
+      console.log(whereConditions,"ppp");
       const users = await db.User.findAll({
         where: whereConditions,
         limit: pageSize,
