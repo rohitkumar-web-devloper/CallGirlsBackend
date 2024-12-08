@@ -13,8 +13,6 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"], 
   credentials: true 
 }));
-// app.use(graphqlUploadExpress());
-// GraphQL connection setup
 const startServer = async () => {
   app.use(
     '/graphql',
