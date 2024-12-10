@@ -8,6 +8,7 @@ import { TimeSlotsAttributes } from '../../models/timeslots';
 const TimeSlot: IResolvers<any, any> = {
   Query: {
     timeSlots: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
+
       const { user } = context;
       if (!user) {
         throw new Error("Unauthorized");
@@ -21,11 +22,20 @@ const TimeSlot: IResolvers<any, any> = {
         ];
       }
       const offset = (page - 1) * pageSize;
-      const timeSlot = await db.TimeSlots.findAll({
-        where: whereConditions,
-        limit: pageSize,
-        offset,
-      });
+      let timeSlot;
+      if (filter && filter.pagination) {
+        timeSlot = await db.TimeSlots.findAll({
+          where: whereConditions,
+          limit: pageSize,
+          offset,
+        });
+      } else {
+        timeSlot = await db.TimeSlots.findAll({
+          where: whereConditions,
+        });
+
+      }
+
       const totalCount = await db.TimeSlots.count({
         where: whereConditions,
       });

@@ -23,10 +23,12 @@ const TimeSlotDefs = gql`
 
   input PlanFilter {
     search: String
+    status:Boolean 
+    pagination:Boolean
   }
 
   type Query {
-    timeSlots(page: Int, pageSize: Int, filter: PlanFilter): PaginatedTimeSlots
+    timeSlots(page: Int, pageSize: Int, filter: PlanFilter ): PaginatedTimeSlots
     timeSlot(id: ID!): TimeSlot
   }
 
