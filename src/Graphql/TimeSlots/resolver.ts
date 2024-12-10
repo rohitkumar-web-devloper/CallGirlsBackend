@@ -8,7 +8,6 @@ import { TimeSlotsAttributes } from '../../models/timeslots';
 const TimeSlot: IResolvers<any, any> = {
   Query: {
     timeSlots: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
-
       const { user } = context;
       if (!user) {
         throw new Error("Unauthorized");
@@ -38,7 +37,6 @@ const TimeSlot: IResolvers<any, any> = {
         });
 
       }
-
       const totalCount = await db.TimeSlots.count({
         where: whereConditions,
       });

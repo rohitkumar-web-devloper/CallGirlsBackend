@@ -68,7 +68,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
         },
         token: {
           type: DataTypes.STRING,
-          allowNull: true, // Token can be nullable initially
+          allowNull: true, 
         },
         profile: {
           type: DataTypes.STRING

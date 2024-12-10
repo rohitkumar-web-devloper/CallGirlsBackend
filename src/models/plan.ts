@@ -65,7 +65,7 @@ class Plan extends Model<PlanAttributes, PlanCreationAttributes> implements Plan
           allowNull: false,
         },
         timeSlots: {
-          type: DataTypes.STRING,
+          type: DataTypes.TEXT,
           allowNull: false,
         },
         type: {
