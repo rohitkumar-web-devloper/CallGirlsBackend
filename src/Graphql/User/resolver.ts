@@ -134,10 +134,10 @@ const User: IResolvers<any, any> = {
             throw new ApolloError("Error uploading file", "FILE_UPLOAD_ERROR");
           }
         }
-        if (data.password) {
+
+        if (!await passwordCompare(data.password, exist.password)) {
           exist.password = await passwordEncrypt(data.password)
         }
-        console.log(profileUrl, typeof data.profile,'ooooooooooooooooooooooooooooooo');
         exist.profile = profileUrl
         exist.mobile = data.mobile
         exist.name = data.name
