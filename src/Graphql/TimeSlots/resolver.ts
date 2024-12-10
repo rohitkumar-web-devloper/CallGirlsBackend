@@ -21,6 +21,9 @@ const TimeSlot: IResolvers<any, any> = {
           { endTime: { [Op.like]: `%${filter.search}%` } },
         ];
       }
+      if (filter && typeof filter.status === 'boolean') {
+        whereConditions.status = filter.status
+      }
       const offset = (page - 1) * pageSize;
       let timeSlot;
       if (filter && filter.pagination) {
