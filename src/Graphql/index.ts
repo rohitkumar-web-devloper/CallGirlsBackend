@@ -8,15 +8,18 @@ import Ads from "./Ads/resolver";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import planDefs from "./Plan/typedefs";
 import Plan from "./Plan/resolver";
+import TimeSlotDefs from "./TimeSlots/typedefs";
+import TimeSlot from "./TimeSlots/resolver";
 
 async function createApolloGraphQlServer() {
   const schema = makeExecutableSchema({
-    typeDefs: [userDefs, categoriesDef, adsDef , planDefs],
+    typeDefs: [userDefs, categoriesDef, adsDef , planDefs, TimeSlotDefs],
     resolvers: [
       User,
       Categories,
       Ads,
       Plan,
+      TimeSlot
     ],
   });
 
