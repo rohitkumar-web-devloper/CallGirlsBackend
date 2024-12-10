@@ -123,9 +123,9 @@ const User: IResolvers<any, any> = {
       }
       const exist: any = await db.User.findOne({ where: { id: data.id } })
       if (exist) {
-        let profileUrl = data.profile;
+        let profileUrl = exist.profile;
         const folder = 'users';
-        if (typeof data.profile !== 'string') {
+        if (typeof data.profile !== 'string' && data.profile) {
           const { file }: any = data.profile;
           const { createReadStream, filename } = file;
           try {
