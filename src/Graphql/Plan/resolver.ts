@@ -13,27 +13,21 @@ const Plan: IResolvers<any, any> = {
         throw new Error("Unauthorized");
       }
       const whereConditions: any = {};
-
-
       if (filter && filter.search) {
         whereConditions[Op.or] = [
           { name: { [Op.like]: `%${filter.search}%` } },
           { description: { [Op.like]: `%${filter.search}%` } },
         ];
       }
-
       const offset = (page - 1) * pageSize;
-
       const plans = await db.Plan.findAll({
         where: whereConditions,
         limit: pageSize,
         offset,
       });
-
       const totalCount = await db.Plan.count({
         where: whereConditions,
       });
-
       return {
         plans,
         totalCount,

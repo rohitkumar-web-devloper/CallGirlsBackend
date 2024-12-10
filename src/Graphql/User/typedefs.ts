@@ -2,7 +2,7 @@ import { gql } from "graphql-tag";
 
 const userDefs = gql`
   scalar DateTime
-  scalar FileUpload
+  scalar Upload  
 
   type User {
     id: ID
@@ -10,9 +10,9 @@ const userDefs = gql`
     email: String
     password: String
     token: String
-    profile: String
+    profile: String 
     status: Boolean
-    mobile:String
+    mobile: String
     createdAt: DateTime
     updatedAt: DateTime
   }
@@ -47,10 +47,10 @@ const userDefs = gql`
       email: String
       password: String
       status: Boolean
-      mobile:String
-      profile: FileUpload
+      mobile: String
+      profile: Upload 
     ): User
-    updateUser(id: ID!, name: String, email: String, status: Boolean , password:String , mobile:String): User
+    updateUser(id: ID!, name: String, email: String, status: Boolean, password: String, mobile: String): User
     deleteUser(id: ID!): User
   }
 `;

@@ -12,7 +12,12 @@ import Plan from "./Plan/resolver";
 async function createApolloGraphQlServer() {
   const schema = makeExecutableSchema({
     typeDefs: [userDefs, categoriesDef, adsDef , planDefs],
-    resolvers: [User, Categories, Ads , Plan],
+    resolvers: [
+      User,
+      Categories,
+      Ads,
+      Plan,
+    ],
   });
 
   const gqlServer = new ApolloServer({

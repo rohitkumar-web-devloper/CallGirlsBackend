@@ -4,7 +4,8 @@ import { UserAttributes } from "../../models/user"
 import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
 import { ApolloError } from 'apollo-server';
 import { Op } from "sequelize";
-
+import { GraphQLUpload } from 'graphql-upload-ts';
+import { saveFileToServer } from "../../SaveFileToServer";
 const User: IResolvers<any, any> = {
   Query: {
     users: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
@@ -55,6 +56,7 @@ const User: IResolvers<any, any> = {
       });
     },
   },
+
   Mutation: {
     loginUser: async (_: any, { email, password }: UserAttributes) => {
       const exist: any = await db.User.findOne({ where: { email, status: true } })
@@ -88,13 +90,30 @@ const User: IResolvers<any, any> = {
     createUser: async (_: any, data: UserAttributes, context: any) => {
       const { user } = context;
       if (!user) {
-        throw new ApolloError("Unauthorized", "Unauthorized");
+        throw new ApolloError("Unauthorized", "UNAUTHORIZED");
       }
-      const exist: any = await db.User.findOne({ where: { email: data.email } })
+      const exist: any = await db.User.findOne({ where: { email: data.email } });
       if (exist) {
-        throw new ApolloError("Email Already Exist", "Email Already Exist");
+        throw new ApolloError("Email Already Exists", "EMAIL_ALREADY_EXISTS");
       }
-      const result = await db.User.create({ ...data, password: await passwordEncrypt(data.password) });
+      let profileUrl = null;
+      const folder = 'users';
+      if (data.profile) {
+        const { file }: any = data.profile;
+        const { createReadStream, filename } = file;
+
+        try {
+          profileUrl = await saveFileToServer(createReadStream, filename, folder);
+        } catch (err) {
+          throw new ApolloError("Error uploading file", "FILE_UPLOAD_ERROR");
+        }
+      }
+      const encryptedPassword = await passwordEncrypt(data.password);
+      const result = await db.User.create({
+        ...data,
+        password: encryptedPassword,
+        profile: profileUrl,
+      });
       return result;
     },
     updateUser: async (_: any, data: UserAttributes, context: any) => {
