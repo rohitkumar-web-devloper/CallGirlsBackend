@@ -48,9 +48,9 @@ const userDefs = gql`
       password: String
       status: Boolean
       mobile: String
-      profile: Upload 
+      profile: Upload
     ): User
-    updateUser(id: ID!, name: String, email: String, status: Boolean, password: String, mobile: String): User
+    updateUser(id: ID!, name: String, email: String, status: Boolean, password: String, mobile: String , profile:Upload ): User
     deleteUser(id: ID!): User
   }
 `;

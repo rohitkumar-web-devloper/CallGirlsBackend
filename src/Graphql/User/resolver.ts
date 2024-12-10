@@ -123,9 +123,22 @@ const User: IResolvers<any, any> = {
       }
       const exist: any = await db.User.findOne({ where: { id: data.id } })
       if (exist) {
+        let profileUrl = data.profile;
+        const folder = 'users';
+        if (typeof data.profile !== 'string') {
+          const { file }: any = data.profile;
+          const { createReadStream, filename } = file;
+          try {
+            profileUrl = await saveFileToServer(createReadStream, filename, folder);
+          } catch (err) {
+            throw new ApolloError("Error uploading file", "FILE_UPLOAD_ERROR");
+          }
+        }
         if (data.password) {
           exist.password = await passwordEncrypt(data.password)
         }
+        console.log(profileUrl, typeof data.profile,'ooooooooooooooooooooooooooooooo');
+        exist.profile = profileUrl
         exist.mobile = data.mobile
         exist.name = data.name
         exist.email = data.email

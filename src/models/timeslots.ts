@@ -49,11 +49,11 @@ class TimeSlots extends Model<TimeSlotsAttributes, TimeSlotsCreationAttributes> 
           },
         },
         startTime: {
-          type: DataTypes.TIME,
+          type: DataTypes.DATE,
           allowNull: false,
         },
         endTime: {
-          type: DataTypes.TIME,
+          type: DataTypes.DATE,
           allowNull: false,
         },
         createdById: {
