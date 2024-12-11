@@ -2,7 +2,7 @@ import { gql } from "graphql-tag";
 
 const planDefs = gql`
   scalar DateTime
-  scalar FileUpload
+  scalar Upload 
 
   type Plan {
     id: ID
@@ -38,7 +38,7 @@ const planDefs = gql`
   type Mutation {
     createPlan(
       name:String
-      image: FileUpload
+      image: Upload
       description: String
       price: Int
       credits: Int
@@ -55,6 +55,7 @@ const planDefs = gql`
       timeSlots: String
       type: String
       status: Boolean
+      image:Upload
     ): Plan
     deletePlan(id: ID!): Plan
   }

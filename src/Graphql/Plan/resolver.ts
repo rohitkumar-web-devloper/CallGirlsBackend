@@ -4,6 +4,7 @@ import { UserAttributes } from "../../models/user"
 import { ApolloError } from 'apollo-server';
 import { Op } from "sequelize";
 import { PlanAttributes } from '../../models/plan';
+import { saveFileToServer } from "../../SaveFileToServer";
 
 const Plan: IResolvers<any, any> = {
   Query: {
@@ -50,7 +51,20 @@ const Plan: IResolvers<any, any> = {
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
-      const result = await db.Plan.create({ ...data });
+      console.log(data)
+      let profileUrl = null;
+      const folder = 'plans';
+      if (data.image) {
+        const { file }: any = data.image;
+        const { createReadStream, filename } = file;
+
+        try {
+          profileUrl = await saveFileToServer(createReadStream, filename, folder);
+        } catch (err) {
+          throw new ApolloError("Error uploading file", "FILE_UPLOAD_ERROR");
+        }
+      }
+      const result = await db.Plan.create({ ...data, image: profileUrl });
       return result
     },
     updatePlan: async (_: any, data: PlanAttributes, context: any) => {
@@ -60,6 +74,17 @@ const Plan: IResolvers<any, any> = {
       }
       const exist: any = await db.Plan.findOne({ where: { id: data.id } })
       if (exist) {
+        let profileUrl = exist.image;
+        const folder = 'plans';
+        if (typeof data.image !== 'string' && data.image) {
+          const { file }: any = data.image;
+          const { createReadStream, filename } = file;
+          try {
+            profileUrl = await saveFileToServer(createReadStream, filename, folder);
+          } catch (err) {
+            throw new ApolloError("Error uploading file", "FILE_UPLOAD_ERROR");
+          }
+        }
         exist.description = data.description
         exist.price = data.price
         exist.credits = data.credits
@@ -67,6 +92,7 @@ const Plan: IResolvers<any, any> = {
         exist.type = data.type
         exist.status = data.status
         exist.name = data.name
+        exist.image = profileUrl
         await exist.save()
         return { ...exist.dataValues, message: 'Plan Updated', success: true }
       } else {
