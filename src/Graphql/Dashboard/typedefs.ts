@@ -2,11 +2,11 @@ import { gql } from "graphql-tag";
 
 const dashboardDef = gql`
   type Dashboard {
-   addCount:Int
-   userCount:Int
-   planCount:Int
-   categoryCount:Int
-   timeSlotCount:Int
+   Adds:Int
+   Users:Int
+   Plans:Int
+   Categories:Int
+   TimeSlots:Int
   }
   type Query {
     dashboard: Dashboard

@@ -14,11 +14,11 @@ const Dashboard: IResolvers<any, any> = {
             const category = await db.Categories.count()
             const timeSlot = await db.TimeSlots.count()
             return {
-                addCount: ads,
-                userCount: userCount,
-                planCount: plan,
-                categoryCount: category,
-                timeSlotCount: timeSlot
+                Adds: ads,
+                Users: userCount,
+                Plans: plan,
+                Categories: category,
+                TimeSlots: timeSlot
             };
         },
 
