@@ -16,7 +16,7 @@ const Dashboard: IResolvers<any, any> = {
             return {
                 Adds: ads,
                 Users: userCount,
-                Plans: plan,
+                Packages: plan,
                 Categories: category,
                 TimeSlots: timeSlot
             };
