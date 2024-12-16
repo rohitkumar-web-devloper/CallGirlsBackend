@@ -2,10 +2,12 @@ import { gql } from "graphql-tag";
 
 const categoriesDef = gql`
   scalar DateTime
-
+  scalar Upload  
   type Category {
     id: ID
     name: String
+    image:String
+    description:String
     status: Boolean
     createdById: Int
     createdByName: String
@@ -32,8 +34,8 @@ const categoriesDef = gql`
   }
 
   type Mutation {
-    createCategories(name: String, status: Boolean = false): Category
-    updateCategories(id: ID!, name: String, status: Boolean): Category
+    createCategories(name: String, image:Upload, description:String, status: Boolean = false): Category
+    updateCategories(id: ID!, name: String, image:Upload , description:String status: Boolean): Category
     deleteCategories(id: ID!): Category
   }
 `;

@@ -3,6 +3,7 @@ import { IResolvers } from "@graphql-tools/utils";
 import { CategoriesAttributes } from '../../models/categories'
 import { ApolloError } from "apollo-server";
 import { Op } from 'sequelize';
+import { saveFileToServer } from "../../SaveFileToServer";
 const Categories: IResolvers<any, any> = {
     Query: {
         categories: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
@@ -14,11 +15,11 @@ const Categories: IResolvers<any, any> = {
             if (filter) {
                 if (filter.name) {
                     whereConditions.name = {
-                        [Op.like]: `%${filter.name}%`, 
+                        [Op.like]: `%${filter.name}%`,
                     };
                 }
                 if (filter.status !== undefined) {
-                    whereConditions.status = filter.status; 
+                    whereConditions.status = filter.status;
                 }
             }
             const offset = (page - 1) * pageSize;
@@ -64,22 +65,47 @@ const Categories: IResolvers<any, any> = {
             })
             if (exist)
                 throw new ApolloError("Already Exist", "Already Exist");
-            const category = await db.Categories.create({ ...data, createdById: user.id, createdByName: user.name });
+            let profileUrl = null;
+            const folder = 'customers';
+            if (data.image) {
+                const { file }: any = data.image;
+                const { createReadStream, filename } = file;
+
+                try {
+                    profileUrl = await saveFileToServer(createReadStream, filename, folder);
+                } catch (err) {
+                    throw new ApolloError("Error uploading file", "FILE_UPLOAD_ERROR");
+                }
+            }
+            const category = await db.Categories.create({ ...data, image: profileUrl, createdById: user.id, createdByName: user.name });
             return { ...category.dataValues, message: 'Category Created', success: true };
         },
-        updateCategories: async (_: any, { id, name, status }: CategoriesAttributes, context: any) => {
+        updateCategories: async (_: any, data: CategoriesAttributes, context: any) => {
             const { user } = context;
             if (!user) {
                 throw new Error("Unauthorized");
             }
             const exist: any = await db.Categories.findOne({
-                where: { id },
+                where: { id: data.id },
             })
             if (!exist) {
                 throw new ApolloError("Category does not exist", "Category does not exist");
             }
-            exist.name = name;
-            exist.status = status;
+            let profileUrl = exist.profile;
+            const folder = 'customers';
+            if (typeof data.image !== 'string' && data.image) {
+                const { file }: any = data.image;
+                const { createReadStream, filename } = file;
+                try {
+                    profileUrl = await saveFileToServer(createReadStream, filename, folder);
+                } catch (err) {
+                    throw new ApolloError("Error uploading file", "FILE_UPLOAD_ERROR");
+                }
+            }
+            exist.name = data.name;
+            exist.image = profileUrl
+            exist.description = data.description
+            exist.status = data.status;
             exist.createdById = user.id;
             exist.createdByName = user.name;
             await exist.save();

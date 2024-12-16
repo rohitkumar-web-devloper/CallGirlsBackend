@@ -4,6 +4,8 @@ import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
 export interface CategoriesAttributes {
   id: number;
   name: string;
+  image: string;
+  description: string;
   createdById: number;
   createdByName: string;
   status: boolean;
@@ -16,6 +18,8 @@ type CategoriesCreationAttributes = Optional<CategoriesAttributes, 'id'>;
 class Categories extends Model<CategoriesAttributes, CategoriesCreationAttributes> implements CategoriesAttributes {
   public id!: number;
   public name!: string;
+  public image!: string;
+  public description!: string;
   public createdById!: number;
   public createdByName!: string;
   public status!: boolean;
@@ -43,6 +47,12 @@ class Categories extends Model<CategoriesAttributes, CategoriesCreationAttribute
           validate: {
             len: [2, 255], // Length validation: name must be between 2 and 255 characters
           },
+        },
+        image: {
+          type: DataTypes.STRING
+        },
+        description: {
+          type: DataTypes.TEXT
         },
         createdById: {
           type: DataTypes.INTEGER,

@@ -12,6 +12,12 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      image: {
+        type: Sequelize.STRING
+      },
+      description: {
+        type: Sequelize.TEXT
+      },
       createdById: {
         type: Sequelize.INTEGER
       },
@@ -20,7 +26,7 @@ module.exports = {
       },
       status: {
         type: Sequelize.BOOLEAN,
-        allowNull:false,
+        allowNull: false,
         defaultValue: false
       },
       createdAt: {
