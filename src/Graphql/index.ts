@@ -24,6 +24,7 @@ async function createApolloGraphQlServer() {
       Ads,
       Plan,
       TimeSlot,
+      Dashboard,
       Customer
     ],
   });
