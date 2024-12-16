@@ -159,7 +159,7 @@ const Customer: IResolvers<any, any> = {
     },
     forgatePassword: async (_: any, data: CustomerAttributes, context: any) => {
       const exist: any = await db.Customer.findOne({ where: { email: data.email } })
-      if (exist) {
+      if (exist) { 
         // SendMail()
         if (!await passwordCompare(data.password, exist.password)) {
           exist.password = await passwordEncrypt(data.password)
