@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { TOKEN_KEY } from '../constants/Variables';
 import db from '../models';
 import User from '../Graphql/User/resolver';
+import Customer from '../models/customer';
 
 const authMiddleware = async (req: any) => {
   try {
@@ -15,13 +16,16 @@ const authMiddleware = async (req: any) => {
     if (!TOKEN_KEY) {
       throw new Error("TOKEN_KEY is not defined");
     }
-    const exist = await db.User.findOne({
+    let exist = await db.User.findOne({
       where: {
         token
       }
     })
     if (!exist) {
-      return null
+      exist = await db.Customer.findOne({ where: { token } })
+      if(!exist){
+        return null
+      }
     }
     const decoded = jwt.verify(token, TOKEN_KEY);
     return decoded;

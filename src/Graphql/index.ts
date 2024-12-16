@@ -12,17 +12,19 @@ import TimeSlotDefs from "./TimeSlots/typedefs";
 import TimeSlot from "./TimeSlots/resolver";
 import dashboardDef from "./Dashboard/typedefs";
 import Dashboard from "./Dashboard/resolver";
+import customerDefs from "./Customers/typedefs";
+import Customer from "./Customers/resolver";
 
 async function createApolloGraphQlServer() {
   const schema = makeExecutableSchema({
-    typeDefs: [userDefs, categoriesDef, adsDef , planDefs, TimeSlotDefs , dashboardDef],
+    typeDefs: [userDefs, categoriesDef, adsDef , planDefs, TimeSlotDefs , dashboardDef , customerDefs],
     resolvers: [
       User,
       Categories,
       Ads,
       Plan,
       TimeSlot,
-      Dashboard
+      Customer
     ],
   });
 

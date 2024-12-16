@@ -1,5 +1,5 @@
 import db from "../../models";
-import { IResolvers } from "@graphql-tools/utils"; // or '@apollo/server'
+import { IResolvers } from "@graphql-tools/utils";
 import { AdsAttributes } from "../../models/ads"
 const Ads: IResolvers<any, any> = {
   Query: {
