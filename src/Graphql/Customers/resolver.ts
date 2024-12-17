@@ -20,6 +20,8 @@ const Customer: IResolvers<any, any> = {
       if (filter && filter.search) {
         whereConditions[Op.or] = [
           { firstName: { [Op.like]: `%${filter.search}%` } },
+          { lastName: { [Op.like]: `%${filter.search}%` } },
+          { mobile: { [Op.like]: `%${filter.search}%` } },
           { email: { [Op.like]: `%${filter.search}%` } },
         ];
       }
@@ -116,8 +118,10 @@ const Customer: IResolvers<any, any> = {
         }
       }
       const encryptedPassword = await passwordEncrypt(data.password);
+      const count = await db.Customer.count()
       const result = await db.Customer.create({
         ...data,
+        token: await generateToken({ id: count + 1, name: data.firstName, email: data.email }),
         password: encryptedPassword,
         profile: profileUrl,
       });
@@ -159,7 +163,7 @@ const Customer: IResolvers<any, any> = {
     },
     forgatePassword: async (_: any, data: CustomerAttributes, context: any) => {
       const exist: any = await db.Customer.findOne({ where: { email: data.email } })
-      if (exist) { 
+      if (exist) {
         // SendMail()
         if (!await passwordCompare(data.password, exist.password)) {
           exist.password = await passwordEncrypt(data.password)
