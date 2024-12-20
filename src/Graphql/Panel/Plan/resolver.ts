@@ -69,7 +69,7 @@ const Plan: IResolvers<any, any> = {
       let profileUrl = null;
       const folder = 'plans';
       if (data.image) {
-        const { file }: any = data.image;
+        const { file }: any = await data.image;
         const { createReadStream, filename } = file;
         try {
           profileUrl = await saveFileToServer(createReadStream, filename, folder);

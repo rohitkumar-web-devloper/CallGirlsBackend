@@ -17,38 +17,8 @@ app.use(cors({
   credentials: true
 }));
 
-app.get('/cities', async (): Promise<any> => {
-  const categoriesWithTopCities = await db.Categories.findAll({
-    attributes: {
-      include: [
-        [Sequelize.fn('COUNT', Sequelize.col('ads.id')), 'total_ads'],
-      ],
-    },
-    include: [
-      {
-        model: db.Ads,
-        as: 'ads',
-        attributes: [
-          'city',
-          [Sequelize.fn('COUNT', Sequelize.col('ads.city')), 'city_count'],
-        ],
-        order: [[Sequelize.fn('COUNT', Sequelize.col('ads.city')), 'DESC']],
-      },
-    ],
-    group: ['Categories.id', 'ads.city'], 
-  });
-  
-  
 
-
-
-
-  console.log(categoriesWithTopCities[0].dataValues.ads, '------------------------------city');
-  return categoriesWithTopCities
-
-})
-
-app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
+app.use(graphqlUploadExpress());
 const startServer = async () => {
   app.use(
     '/graphql',
