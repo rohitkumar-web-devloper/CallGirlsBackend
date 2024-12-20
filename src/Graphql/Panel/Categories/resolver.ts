@@ -93,7 +93,7 @@ const Categories: IResolvers<any, any> = {
             let profileUrl = exist.profile;
             const folder = 'customers';
             if (typeof data.image !== 'string' && data.image) {
-                const { file }: any = data.image;
+                const file : any = await data.image;
                 const { createReadStream, filename } = file;
                 try {
                     profileUrl = await saveFileToServer(createReadStream, filename, folder);
