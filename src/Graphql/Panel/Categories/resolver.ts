@@ -80,20 +80,22 @@ const Categories: IResolvers<any, any> = {
             return { ...category.dataValues, message: 'Category Created', success: true };
         },
         updateCategories: async (_: any, data: CategoriesAttributes, context: any) => {
+            console.log(data, 'lll');
             const { user } = context;
             if (!user) {
                 throw new Error("Unauthorized");
             }
             const exist: any = await db.Categories.findOne({
-                where: { id: data.id },
+                where: { id: +data.id },
             })
+            console.log(exist,'pp');
             if (!exist) {
                 throw new ApolloError("Category does not exist", "Category does not exist");
             }
-            let profileUrl = exist.profile;
+            let profileUrl = exist.image;
             const folder = 'customers';
             if (typeof data.image !== 'string' && data.image) {
-                const file : any = await data.image;
+                const file: any = await data.image;
                 const { createReadStream, filename } = file;
                 try {
                     profileUrl = await saveFileToServer(createReadStream, filename, folder);
@@ -104,7 +106,7 @@ const Categories: IResolvers<any, any> = {
             exist.name = data.name;
             exist.image = profileUrl
             exist.description = data.description
-            exist.status = data.status;
+            exist.status = data.status || exist.status;
             exist.createdById = user.id;
             exist.createdByName = user.name;
             await exist.save();
