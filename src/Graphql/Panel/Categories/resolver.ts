@@ -1,9 +1,9 @@
-import db from "../../models";
+import db from "../../../models";
 import { IResolvers } from "@graphql-tools/utils";
-import { CategoriesAttributes } from '../../models/categories'
+import { CategoriesAttributes } from '../../../models/categories'
 import { ApolloError } from "apollo-server";
 import { Op } from 'sequelize';
-import { saveFileToServer } from "../../SaveFileToServer";
+import { saveFileToServer } from "../../../SaveFileToServer";
 const Categories: IResolvers<any, any> = {
     Query: {
         categories: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {

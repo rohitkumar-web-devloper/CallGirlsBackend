@@ -1,23 +1,28 @@
 import { ApolloServer } from "@apollo/server";
-import userDefs from "./User/typedefs";
-import User from "./User/resolver";
-import categoriesDef from "./Categories/typedefs";
-import Categories from "./Categories/resolver";
-import adsDef from "./Ads/typedefs";
-import Ads from "./Ads/resolver";
+import userDefs from "./Panel/User/typedefs";
+import User from "./Panel/User/resolver";
+import categoriesDef from "./Panel/Categories/typedefs";
+import Categories from "./Panel/Categories/resolver";
+import adsDef from "./Panel/Ads/typedefs";
+import Ads from "./Panel/Ads/resolver";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import planDefs from "./Plan/typedefs";
-import Plan from "./Plan/resolver";
-import TimeSlotDefs from "./TimeSlots/typedefs";
-import TimeSlot from "./TimeSlots/resolver";
-import dashboardDef from "./Dashboard/typedefs";
-import Dashboard from "./Dashboard/resolver";
-import customerDefs from "./Customers/typedefs";
-import Customer from "./Customers/resolver";
+import planDefs from "./Panel/Plan/typedefs";
+import Plan from "./Panel/Plan/resolver";
+import TimeSlotDefs from "./Panel/TimeSlots/typedefs";
+import TimeSlot from "./Panel/TimeSlots/resolver";
+import dashboardDef from "./Panel/Dashboard/typedefs";
+import Dashboard from "./Panel/Dashboard/resolver";
+
+import HomeDef from "./Web/Home/typedefs";
+import Home from "./Web/Home/resolver";
+import customerDefs from "./Web/Customers/typedefs";
+import Customer from "./Web/Customers/resolver";
+import ModalDataDef from "./Web/ModalData/typedefs";
+import ModalData from "./Web/ModalData/resolver";
 
 async function createApolloGraphQlServer() {
   const schema = makeExecutableSchema({
-    typeDefs: [userDefs, categoriesDef, adsDef , planDefs, TimeSlotDefs , dashboardDef , customerDefs],
+    typeDefs: [userDefs, categoriesDef, adsDef , planDefs, TimeSlotDefs , dashboardDef , customerDefs , HomeDef , ModalDataDef],
     resolvers: [
       User,
       Categories,
@@ -25,13 +30,17 @@ async function createApolloGraphQlServer() {
       Plan,
       TimeSlot,
       Dashboard,
-      Customer
+      Customer,
+      Home,
+      ModalData
     ],
+    
   });
 
   const gqlServer = new ApolloServer({
     schema, // Provide the schema directly
     csrfPrevention: false,
+  
   });
 
   await gqlServer.start();

@@ -3,15 +3,18 @@ import { gql } from "graphql-tag";
 const planDefs = gql`
   scalar DateTime
   scalar Upload 
-
+type slot {
+      planId:Int
+      timeSlotId:Int
+}
   type Plan {
     id: ID
-    name:String
+    name: String
     image: String
     description: String
     price: Int
     credits: Int
-    timeSlots: String
+    timeSlots: [slot]
     type: String
     status: Boolean
     createdAt: DateTime
@@ -37,25 +40,25 @@ const planDefs = gql`
 
   type Mutation {
     createPlan(
-      name:String
+      name: String
       image: Upload
       description: String
       price: Int
       credits: Int
-      timeSlots: String
+      timeSlots: [Int!]! # Array of non-null integers
       type: String
       status: Boolean = false
     ): Plan
     updatePlan(
       id: ID!
-      name:String
+      name: String
       description: String
       price: Int
       credits: Int
-      timeSlots: String
+      timeSlots: [Int!] # Optional array of non-null integers
       type: String
       status: Boolean
-      image:Upload
+      image: Upload
     ): Plan
     deletePlan(id: ID!): Plan
   }

@@ -25,7 +25,7 @@ export interface AdsAttributes {
   createdByName: string
   services: string[];
   attentionTo: string[];
-  profile: string[];
+  profile: any[];
   placeOfService: string[];
   paymentMethod: string[];
 }
@@ -66,8 +66,7 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
   public readonly updatedAt!: Date;
 
   static associate(models: any) {
-    // Define associations here
-    // Ads.belongsTo(models.SomeOtherModel);
+    Ads.belongsTo(models.Categories, { foreignKey: 'categoryId', as: 'categoryAssociation' });
   }
 
   static initModel(sequelize: Sequelize): typeof Ads {

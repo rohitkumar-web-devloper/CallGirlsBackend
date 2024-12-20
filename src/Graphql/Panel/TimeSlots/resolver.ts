@@ -1,9 +1,9 @@
-import db from "../../models";
+import db from "../../../models";
 import { IResolvers } from "@graphql-tools/utils";
-import { UserAttributes } from "../../models/user"
+import { UserAttributes } from "../../../models/user"
 import { ApolloError } from 'apollo-server';
 import { Op } from "sequelize";
-import { TimeSlotsAttributes } from '../../models/timeslots';
+import { TimeSlotsAttributes } from '../../../models/timeslots';
 
 const TimeSlot: IResolvers<any, any> = {
   Query: {

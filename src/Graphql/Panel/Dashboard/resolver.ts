@@ -1,5 +1,5 @@
 import { ApolloError } from "apollo-server-express";
-import db from "../../models";
+import db from "../../../models";
 import { IResolvers } from "@graphql-tools/utils";
 const Dashboard: IResolvers<any, any> = {
     Query: {

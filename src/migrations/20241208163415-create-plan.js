@@ -28,10 +28,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      timeSlots: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-      },
       type: {
         type: Sequelize.STRING,
         allowNull: false,

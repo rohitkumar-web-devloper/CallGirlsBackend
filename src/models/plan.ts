@@ -1,4 +1,5 @@
 import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import PlanSlot from './planslot';
 
 // Define the attributes for the Plan model
 export interface PlanAttributes {
@@ -8,7 +9,6 @@ export interface PlanAttributes {
   description: string;
   price: number;
   credits: number;
-  timeSlots: string;
   type: string;
   status: boolean;
 }
@@ -24,7 +24,6 @@ class Plan extends Model<PlanAttributes, PlanCreationAttributes> implements Plan
   public description!: string;
   public price!: number;
   public credits!: number;
-  public timeSlots!: string;
   public type!: string;
   public status!: boolean;
 
@@ -34,6 +33,7 @@ class Plan extends Model<PlanAttributes, PlanCreationAttributes> implements Plan
 
   static associate(models: any) {
     // Define associations here (e.g., Plan.hasMany(models.OtherModel))
+    Plan.hasMany(models.PlanSlot , { foreignKey: 'planId', as: 'timeSlots' })
   }
 
   // Static method to initialize the model
@@ -62,10 +62,6 @@ class Plan extends Model<PlanAttributes, PlanCreationAttributes> implements Plan
         },
         credits: {
           type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        timeSlots: {
-          type: DataTypes.TEXT,
           allowNull: false,
         },
         type: {

@@ -2,8 +2,8 @@ import { gql } from "graphql-tag";
 
 const adsDef = gql`
 scalar DateTime
+scalar Upload  
   type Ads {
-
     id: ID
     category: String
     categoryId: Int
@@ -26,7 +26,7 @@ scalar DateTime
     createdByName: String
     services: [String]
     attentionTo: [String]
-    profile: [String]
+    profile: [String!]!
     placeOfService: [String]
     paymentMethod: [String]
     createdAt: DateTime
@@ -58,7 +58,6 @@ scalar DateTime
     pricePerHour: String
     services: [String]
     attentionTo: [String]
-    profile: [String]
     placeOfService: [String]
     paymentMethod: [String]
   }
@@ -69,8 +68,8 @@ scalar DateTime
   }
 
   type Mutation {
-    createAd(input: AdInput): Ads
-    updateAd(id: Int, input: AdInput): Ads
+    createAd( input: AdInput ,  profile: [Upload]): Ads
+    updateAd(id: Int, input: AdInput ,): Ads
     deleteAd(id:Int):Response
   }
 `;

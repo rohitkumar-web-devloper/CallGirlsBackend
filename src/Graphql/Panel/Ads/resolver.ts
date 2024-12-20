@@ -1,7 +1,11 @@
-import db from "../../models";
+import db from "../../../models";
 import { IResolvers } from "@graphql-tools/utils";
-import { AdsAttributes } from "../../models/ads"
+import { AdsAttributes } from "../../../models/ads"
+import { GraphQLUpload } from "graphql-upload-ts";
+import MultipleFileUpload from "../../../MultipleFileUpload";
+import { ApolloError, UserInputError } from "apollo-server-express";
 const Ads: IResolvers<any, any> = {
+  Upload: GraphQLUpload,
   Query: {
     ads: async (_: any, __: any, context: any) => {
       const { user } = context;
@@ -9,14 +13,14 @@ const Ads: IResolvers<any, any> = {
         throw new Error("Unauthorized");
       }
       try {
-        const ads:any = await db.Ads.findAll()
+        const ads: any = await db.Ads.findAll()
         return ads.map((ad: any) => ({
           ...ad.toJSON(),
           services: Array(ad.services),
           profile: Array(ad.profile),
-          attentionTo:Array(ad.attentionTo),
-          placeOfService:Array(ad.placeOfService),
-          paymentMethod :Array(ad.paymentMethod)
+          attentionTo: Array(ad.attentionTo),
+          placeOfService: Array(ad.placeOfService),
+          paymentMethod: Array(ad.paymentMethod)
         }));
       } catch (error) {
         console.error("Error fetching ads:", error);
@@ -26,14 +30,14 @@ const Ads: IResolvers<any, any> = {
 
     ad: async (_: any, { id }: AdsAttributes) => {
       try {
-        const ad:any = await db.Ads.findOne({where:{id}})
-        return { 
+        const ad: any = await db.Ads.findOne({ where: { id } })
+        return {
           ...ad.dataValues,
           services: Array(ad.services),
           profile: Array(ad.profile),
-          attentionTo:Array(ad.attentionTo),
-          placeOfService:Array(ad.placeOfService),
-          paymentMethod :Array(ad.paymentMethod)
+          attentionTo: Array(ad.attentionTo),
+          placeOfService: Array(ad.placeOfService),
+          paymentMethod: Array(ad.paymentMethod)
         };
       } catch (error) {
         console.error("Error fetching ads:", error);
@@ -47,7 +51,11 @@ const Ads: IResolvers<any, any> = {
       if (!user) {
         throw new Error("Unauthorized");
       }
-      const result = await db.Ads.create({ ...data, createdById: user.id, createdByName: "Ram" });
+      if (!data.profile || data.profile.length === 0) {
+        throw new UserInputError("No files uploaded. Please upload at least one image.");
+      }
+      let fileUrls = await MultipleFileUpload(data.profile, 'Ads');
+      const result = await db.Ads.create({ ...data.input, createdById: user.id, createdByName: user.name, profile: fileUrls });
       if (result) {
         return { ...result.dataValues, message: "Ad Created Successfully", success: true }
       }
@@ -102,6 +110,6 @@ const Ads: IResolvers<any, any> = {
     },
   },
 };
-
+  
 export default Ads;
 

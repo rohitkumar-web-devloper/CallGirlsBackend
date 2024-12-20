@@ -1,11 +1,10 @@
-import db from "../../models";
+import db from "../../../models";
 import { IResolvers } from "@graphql-tools/utils";
-import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
+import { passwordCompare, passwordEncrypt, generateToken } from "../../../helpers";
 import { ApolloError } from 'apollo-server';
 import { Op } from "sequelize";
-import { saveFileToServer } from "../../SaveFileToServer";
-import { CustomerAttributes } from '../../models/customer';
-import SendMail from "../../helpers/SendMail";
+import { saveFileToServer } from "../../../SaveFileToServer";
+import { CustomerAttributes } from '../../../models/customer';
 const Customer: IResolvers<any, any> = {
   Query: {
     customers: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {

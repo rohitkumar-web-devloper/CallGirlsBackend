@@ -29,8 +29,7 @@ class Categories extends Model<CategoriesAttributes, CategoriesCreationAttribute
   public readonly updatedAt!: Date;
 
   static associate(models: any) {
-    // Define associations here
-    // Categories.hasMany(models.SomeOtherModel, { foreignKey: 'categoryId', as: 'relatedModels' });
+    Categories.hasMany(models.Ads, { foreignKey: 'categoryId', as: 'ads' });
   }
 
   static initModel(sequelize: Sequelize): typeof Categories {

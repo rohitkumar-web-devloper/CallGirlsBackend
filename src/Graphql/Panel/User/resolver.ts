@@ -1,11 +1,11 @@
-import db from "../../models";
+import db from "../../../models";
 import { IResolvers } from "@graphql-tools/utils";
-import { UserAttributes } from "../../models/user"
-import { passwordCompare, passwordEncrypt, generateToken } from "../../helpers";
+import { UserAttributes } from "../../../models/user"
+import { passwordCompare, passwordEncrypt, generateToken } from "../../../helpers";
 import { ApolloError } from 'apollo-server';
 import { Op } from "sequelize";
 import { GraphQLUpload } from 'graphql-upload-ts';
-import { saveFileToServer } from "../../SaveFileToServer";
+import { saveFileToServer } from "../../../SaveFileToServer";
 const User: IResolvers<any, any> = {
   Query: {
     users: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
