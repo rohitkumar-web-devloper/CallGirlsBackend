@@ -5,12 +5,6 @@ import { Sequelize } from 'sequelize';
 const Home: IResolvers<any, any> = {
     Query: {
         homeCategory: async (_: any, data: any, context: any) => {
-            const { user } = context;
-
-            if (!user) {
-                throw new ApolloError("Unauthorized", "Unauthorized");
-            }
-
             const categories: any = await db.Categories.findAll({
                 attributes: [
                     'id',

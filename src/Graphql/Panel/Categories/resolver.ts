@@ -80,7 +80,6 @@ const Categories: IResolvers<any, any> = {
             return { ...category.dataValues, message: 'Category Created', success: true };
         },
         updateCategories: async (_: any, data: CategoriesAttributes, context: any) => {
-            console.log(data, 'lll');
             const { user } = context;
             if (!user) {
                 throw new Error("Unauthorized");
@@ -88,7 +87,6 @@ const Categories: IResolvers<any, any> = {
             const exist: any = await db.Categories.findOne({
                 where: { id: +data.id },
             })
-            console.log(exist,'pp');
             if (!exist) {
                 throw new ApolloError("Category does not exist", "Category does not exist");
             }
