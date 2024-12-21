@@ -99,7 +99,7 @@ const User: IResolvers<any, any> = {
       let profileUrl = null;
       const folder = 'users';
       if (data.profile) {
-        const { file }: any = data.profile;
+        const file : any = await data.profile;
         const { createReadStream, filename } = file;
 
         try {
@@ -126,7 +126,7 @@ const User: IResolvers<any, any> = {
         let profileUrl = exist.profile;
         const folder = 'users';
         if (typeof data.profile !== 'string' && data.profile) {
-          const { file }: any = data.profile;
+          const file : any = await data.profile;
           const { createReadStream, filename } = file;
           try {
             profileUrl = await saveFileToServer(createReadStream, filename, folder);

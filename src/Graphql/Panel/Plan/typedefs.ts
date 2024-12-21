@@ -3,10 +3,15 @@ import { gql } from "graphql-tag";
 const planDefs = gql`
   scalar DateTime
   scalar Upload 
-type slot {
-      planId:Int
-      timeSlotId:Int
-}
+  type slot{
+    endTime:String
+    startTime:String
+  }
+ type timeSlots{
+  planId:Int
+  timeSlotId:Int
+  slots:[slot]
+ }
   type Plan {
     id: ID
     name: String
@@ -14,7 +19,7 @@ type slot {
     description: String
     price: Int
     credits: Int
-    timeSlots: [slot]
+    timeSlots:[timeSlots]
     type: String
     status: Boolean
     createdAt: DateTime

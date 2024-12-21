@@ -22,18 +22,26 @@ const Plan: IResolvers<any, any> = {
         ];
       }
       const offset = (page - 1) * pageSize;
-      const plans = await db.Plan.findAll({
+      const plans:any = await db.Plan.findAll({
         where: whereConditions,
         include: [
           {
               model: db.PlanSlot,
               as: 'timeSlots',
-              attributes:['planId' , 'timeSlotId']
+              attributes: ['planId', 'timeSlotId'],
+              include: [
+                  {
+                      model: db.TimeSlots, 
+                      as: 'slots', 
+                      attributes: ['startTime', 'endTime'],
+                  }
+              ]
           },
       ],
         limit: pageSize,
         offset,
       });
+      console.log(plans[0].timeSlots,'kkkkkk');
       const totalCount = await db.Plan.count({
         where: whereConditions,
       });
