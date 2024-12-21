@@ -105,7 +105,7 @@ const Plan: IResolvers<any, any> = {
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
-      const exist: any = await db.Plan.findOne({ where: { id: data.id } })
+      const exist: any = await db.Plan.findOne({ where: { id: +data.id } })
       if (exist) {
         let profileUrl = exist.image;
         const folder = 'plans';
