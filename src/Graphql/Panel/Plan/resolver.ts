@@ -22,22 +22,22 @@ const Plan: IResolvers<any, any> = {
         ];
       }
       const offset = (page - 1) * pageSize;
-      const plans:any = await db.Plan.findAll({
+      const plans: any = await db.Plan.findAll({
         where: whereConditions,
         include: [
           {
-              model: db.PlanSlot,
-              as: 'timeSlots',
-              attributes: ['planId', 'timeSlotId'],
-              include: [
-                  {
-                      model: db.TimeSlots, 
-                      as: 'slots', 
-                      attributes: ['startTime', 'endTime'],
-                  }
-              ]
+            model: db.PlanSlot,
+            as: 'timeSlots',
+            attributes: ['planId', 'timeSlotId'],
+            include: [
+              {
+                model: db.TimeSlots,
+                as: 'slots',
+                attributes: ['startTime', 'endTime'],
+              }
+            ]
           },
-      ],
+        ],
         limit: pageSize,
         offset,
       });
@@ -59,11 +59,11 @@ const Plan: IResolvers<any, any> = {
         },
         include: [
           {
-              model: db.PlanSlot,
-              as: 'timeSlots',
-              attributes:['planId' , 'timeSlotId']
+            model: db.PlanSlot,
+            as: 'timeSlots',
+            attributes: ['planId', 'timeSlotId']
           },
-      ],
+        ],
       });
     },
   },
@@ -76,7 +76,7 @@ const Plan: IResolvers<any, any> = {
       let profileUrl = null;
       const folder = 'plans';
       if (data.image) {
-        const  file : any = await data.image;
+        const file: any = await data.image;
         const { createReadStream, filename } = file;
         try {
           profileUrl = await saveFileToServer(createReadStream, filename, folder);
@@ -88,15 +88,15 @@ const Plan: IResolvers<any, any> = {
       for (let index = 0; index < data.timeSlots.length; index++) {
         await db.PlanSlot.create({ planId: result.id, timeSlotId: data.timeSlots[index] })
       }
-      const response = await db.Plan.findOne({ 
-        where: { id: result.id }, 
+      const response = await db.Plan.findOne({
+        where: { id: result.id },
         include: [
           {
-              model: db.PlanSlot,
-              as: 'timeSlots',
-              attributes:['planId' , 'timeSlotId']
+            model: db.PlanSlot,
+            as: 'timeSlots',
+            attributes: ['planId', 'timeSlotId']
           },
-      ],
+        ],
       })
       return response
     },
@@ -110,7 +110,7 @@ const Plan: IResolvers<any, any> = {
         let profileUrl = exist.image;
         const folder = 'plans';
         if (typeof data.image !== 'string' && data.image) {
-          const { file }: any = data.image;
+          const file: any = await data.image;
           const { createReadStream, filename } = file;
           try {
             profileUrl = await saveFileToServer(createReadStream, filename, folder);
@@ -126,26 +126,26 @@ const Plan: IResolvers<any, any> = {
         exist.name = data.name
         exist.image = profileUrl
         await exist.save()
-        await db.PlanSlot.destroy({where:{planId:exist.id}})
+        await db.PlanSlot.destroy({ where: { planId: exist.id } })
         for (let index = 0; index < data.timeSlots.length; index++) {
           await db.PlanSlot.create({ planId: exist.id, timeSlotId: data.timeSlots[index] })
         }
-      return await db.Plan.findOne({
-          where: {id:data.id},
+        return await db.Plan.findOne({
+          where: { id: data.id },
           include: [
             {
-                model: db.PlanSlot,
-                as: 'timeSlots',
-                attributes: ['planId', 'timeSlotId'],
-                include: [
-                    {
-                        model: db.TimeSlots, 
-                        as: 'slots', 
-                        attributes: ['startTime', 'endTime'],
-                    }
-                ]
+              model: db.PlanSlot,
+              as: 'timeSlots',
+              attributes: ['planId', 'timeSlotId'],
+              include: [
+                {
+                  model: db.TimeSlots,
+                  as: 'slots',
+                  attributes: ['startTime', 'endTime'],
+                }
+              ]
             },
-        ],
+          ],
         });
       } else {
         return { message: 'Plan Not Found', success: false }
