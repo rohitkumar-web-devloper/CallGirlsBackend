@@ -41,7 +41,6 @@ const Plan: IResolvers<any, any> = {
         limit: pageSize,
         offset,
       });
-      console.log(plans[0].timeSlots,'kkkkkk');
       const totalCount = await db.Plan.count({
         where: whereConditions,
       });
@@ -131,17 +130,23 @@ const Plan: IResolvers<any, any> = {
         for (let index = 0; index < data.timeSlots.length; index++) {
           await db.PlanSlot.create({ planId: exist.id, timeSlotId: data.timeSlots[index] })
         }
-        const response = await db.Plan.findOne({ 
-          where: { id: exist.id }, 
+      return await db.Plan.findOne({
+          where: {id:data.id},
           include: [
             {
                 model: db.PlanSlot,
                 as: 'timeSlots',
-                attributes:['planId' , 'timeSlotId']
+                attributes: ['planId', 'timeSlotId'],
+                include: [
+                    {
+                        model: db.TimeSlots, 
+                        as: 'slots', 
+                        attributes: ['startTime', 'endTime'],
+                    }
+                ]
             },
         ],
-        })
-        return response
+        });
       } else {
         return { message: 'Plan Not Found', success: false }
       }
