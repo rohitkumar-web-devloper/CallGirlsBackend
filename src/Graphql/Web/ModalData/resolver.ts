@@ -1,7 +1,6 @@
 import { ApolloError } from "apollo-server-express";
 import db from "../../../models";
 import { IResolvers } from "@graphql-tools/utils";
-import { Sequelize } from 'sequelize';
 const ModalData: IResolvers<any, any> = {
     Query: {
         modalCategory: async (_: any, data: any, context: any) => {
@@ -47,7 +46,6 @@ const ModalData: IResolvers<any, any> = {
             const res = await db.Ads.findAll({ where: { categoryId: data.catId } });
             return res
         },
-
     },
 };
 

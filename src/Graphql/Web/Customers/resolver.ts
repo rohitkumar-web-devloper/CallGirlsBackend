@@ -107,7 +107,7 @@ const Customer: IResolvers<any, any> = {
       let profileUrl = null;
       const folder = 'customers';
       if (data.profile) {
-        const { file }: any = data.profile;
+        const  file : any = await data.profile;
         const { createReadStream, filename } = file;
 
         try {
