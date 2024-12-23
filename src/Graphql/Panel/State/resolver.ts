@@ -22,7 +22,7 @@ const States: IResolvers<any, any> = {
                 limit: pageSize,
                 offset,
             })
-            const totalCount = await db.State.count();
+            const totalCount = await db.State.count({ where: whereConditions });
             return {
                 states,
                 totalCount,
@@ -51,9 +51,7 @@ const States: IResolvers<any, any> = {
                 offset,
             })
             const totalCount = await db.City.count({
-                where: {
-                    stateId
-                }
+                where: whereConditions,
             });
             return {
                 cities,
@@ -89,7 +87,7 @@ const States: IResolvers<any, any> = {
                 exist.name = data.name
                 exist.stateId = data.stateId
                 await exist.save()
-                return { ...exist.dataValues}
+                return { ...exist.dataValues }
             } else {
                 throw new ApolloError("City is not exist", "City is not exist");
             }

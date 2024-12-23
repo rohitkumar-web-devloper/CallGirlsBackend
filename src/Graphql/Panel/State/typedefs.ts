@@ -1,14 +1,19 @@
 import { gql } from "graphql-tag";
 
 const stateDef = gql`
+scalar DateTime
   type State {
     id: ID
     name: String
+    createdAt: DateTime
+    updatedAt: DateTime
   }
   type City {
     id: ID
     name: String
     stateId: ID
+    createdAt: DateTime
+    updatedAt: DateTime
   }
   input UserFilter {
     search: String
