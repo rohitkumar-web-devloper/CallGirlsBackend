@@ -9,6 +9,21 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      planId: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+      },
+      startTime: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      endTime: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      price: {
+        type: Sequelize.INTEGER
+      },
       category: {
         type: Sequelize.STRING
       },
@@ -18,7 +33,7 @@ module.exports = {
       city: {
         type: Sequelize.STRING
       },
-      district: {
+      state: {
         type: Sequelize.STRING
       },
       address: {

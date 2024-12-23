@@ -4,10 +4,15 @@ import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
 export interface AdsAttributes {
   [x: string]: any;
   id: number;
+  planId: number;
+  startTime: string;
+  endTime: string;
+  price:number;
+  email: string;
   category: string;
   categoryId: number;
   city: string;
-  district: string;
+  state: string;
   address: string;
   zip: string;
   age: string;
@@ -28,6 +33,7 @@ export interface AdsAttributes {
   profile: any[];
   placeOfService: string[];
   paymentMethod: string[];
+
 }
 
 // Optional fields for model creation
@@ -35,11 +41,17 @@ type AdsCreationAttributes = Optional<AdsAttributes, 'id'>;
 
 // Define the Ads model class
 class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttributes {
+  [x: string]: any;
   public id!: number;
+  public planId!: number;
+  public startTime!: string;
+  public endTime!: string;
+  public price!: number;
+  public email!: string;
   public category!: string;
   public categoryId!: number;
   public city!: string;
-  public district!: string;
+  public state!: string;
   public address!: string;
   public zip!: string;
   public age!: string;
@@ -58,6 +70,7 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
   public services!: string[];
   public attentionTo!: string[];
   public profile!: string[];
+
   public placeOfService!: string[];
   public paymentMethod!: string[];
 
@@ -77,6 +90,29 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
           autoIncrement: true,
           primaryKey: true,
         },
+        planId: {
+          type: DataTypes.INTEGER,
+        },
+        startTime: {
+          type: DataTypes.DATE,
+          allowNull: false
+        },
+        endTime: {
+          type: DataTypes.DATE,
+          allowNull: false
+        },
+        price: {
+          type: DataTypes.INTEGER,
+          allowNull: false
+        },
+        email: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          unique: true,
+          validate: {
+            isEmail: true,
+          },
+        },
         category: {
           type: DataTypes.STRING,
           allowNull: false,
@@ -89,7 +125,7 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
           type: DataTypes.STRING,
           allowNull: false,
         },
-        district: {
+        state: {
           type: DataTypes.STRING,
           allowNull: false,
         },

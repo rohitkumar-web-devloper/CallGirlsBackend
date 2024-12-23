@@ -5,10 +5,15 @@ scalar DateTime
 scalar Upload  
   type Ads {
     id: ID
+    planId: Int;
+    startTime: DateTime;
+    endTime: DateTime;
+    price: Int;
+    email: String;
     category: String
     categoryId: Int
     city: String
-    district: String
+    state: String
     address: String
     zip: String
     age: String
@@ -39,10 +44,15 @@ scalar Upload
     success: Boolean
   }
   input AdInput {
+    planId: Int;
+    startTime: DateTime;
+    endTime: DateTime;
+    price: Int;
+    email: String;
     category: String
     categoryId: Int
     city: String
-    district: String
+    state: String
     address: String
     zip: String
     age: String
