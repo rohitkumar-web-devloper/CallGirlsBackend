@@ -33,6 +33,8 @@ scalar DateTime
     totalPages: Int
   }
   type Query {
+    modalStates:[State]
+    modalCities(stateId:Int):[City]
     states(page: Int, pageSize: Int, filter: UserFilter): PaginationState
     cities(stateId:ID , page: Int, pageSize: Int, filter: UserFilter):PaginationCity
   }

@@ -5,7 +5,7 @@ import { Op } from "sequelize";
 import { CityAttributes } from "../../../models/city";
 const States: IResolvers<any, any> = {
     Query: {
-        states: async (_: any, { page = 1, pageSize, filter }: { page: number, pageSize: number | null, filter?: any }, context: any) => {
+        states: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
             const { user } = context;
             if (!user) {
                 throw new ApolloError("Unauthorized", "Unauthorized");
@@ -16,30 +16,22 @@ const States: IResolvers<any, any> = {
                     { name: { [Op.like]: `%${filter.search}%` } },
                 ];
             }
-            let states;
-            if (pageSize) {
-                const offset = (page - 1) * pageSize;
-                states = await db.State.findAll({
-                    where: whereConditions,
-                    limit: pageSize,
-                    offset,
-                })
-            } else {
-                states = await db.State.findAll({
-                    where: whereConditions,
-                })
-            }
-
+            const offset = (page - 1) * pageSize;
+            const states = await db.State.findAll({
+                where: whereConditions,
+                limit: pageSize,
+                offset,
+            })
             const totalCount = await db.State.count({ where: whereConditions });
             return {
                 states,
                 totalCount,
                 page,
                 pageSize,
-                totalPages: pageSize ? Math.ceil(totalCount / pageSize) : 0,
+                totalPages: Math.ceil(totalCount / pageSize),
             };
         },
-        cities: async (_: any, { page = 1, pageSize, filter, stateId }: { page: number, pageSize: number | null, filter?: any, stateId: number }, context: any) => {
+        cities: async (_: any, { page = 1, pageSize = 10, filter, stateId }: { page: number, pageSize: number, filter?: any, stateId: number }, context: any) => {
             const { user } = context;
             if (!user) {
                 throw new ApolloError("Unauthorized", "Unauthorized");
@@ -52,20 +44,12 @@ const States: IResolvers<any, any> = {
                     { name: { [Op.like]: `%${filter.search}%` } },
                 ];
             }
-            let cities;
-            if (pageSize) {
-                const offset = (page - 1) * pageSize;
-                cities = await db.City.findAll({
-                    where: whereConditions,
-                    limit: pageSize,
-                    offset,
-                })
-            } else {
-                const cities = await db.City.findAll({
-                    where: whereConditions,
-                })
-            }
-
+            const offset = (page - 1) * pageSize;
+            const cities = await db.City.findAll({
+                where: whereConditions,
+                limit: pageSize,
+                offset,
+            })
             const totalCount = await db.City.count({
                 where: whereConditions,
             });
@@ -74,8 +58,31 @@ const States: IResolvers<any, any> = {
                 totalCount,
                 page,
                 pageSize,
-                totalPages: pageSize ? Math.ceil(totalCount / pageSize) : 0,
+                totalPages: Math.ceil(totalCount / pageSize),
             };
+        },
+        modalStates: async (_: any, data: any, context: any) => {
+            const { user } = context;
+            if (!user) {
+                throw new ApolloError("Unauthorized", "Unauthorized");
+            }
+          
+            return await db.State.findAll()
+          
+        },
+        modalCities: async (_: any, { stateId }: { stateId: number }, context: any) => {
+            const { user } = context;
+            if (!user) {
+                throw new ApolloError("Unauthorized", "Unauthorized");
+            }
+            const whereConditions: any = {
+                stateId
+            };
+           
+            return await db.City.findAll({
+                where: whereConditions,
+             
+            })
         }
     },
     Mutation: {
