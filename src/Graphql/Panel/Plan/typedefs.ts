@@ -60,7 +60,7 @@ const planDefs = gql`
       description: String
       price: Int
       credits: Int
-      timeSlots: [Int!] # Optional array of non-null integers
+      timeSlots: [Int!] 
       type: String
       status: Boolean
       image: Upload

@@ -19,10 +19,12 @@ import customerDefs from "./Web/Customers/typedefs";
 import Customer from "./Web/Customers/resolver";
 import ModalDataDef from "./Web/ModalData/typedefs";
 import ModalData from "./Web/ModalData/resolver";
+import stateDef from "./Panel/State/typedefs";
+import States from "./Panel/State/resolver";
 
 async function createApolloGraphQlServer() {
   const schema = makeExecutableSchema({
-    typeDefs: [userDefs, categoriesDef, adsDef , planDefs, TimeSlotDefs , dashboardDef , customerDefs , HomeDef , ModalDataDef],
+    typeDefs: [userDefs, categoriesDef, adsDef , planDefs, TimeSlotDefs , dashboardDef , customerDefs , HomeDef , ModalDataDef , stateDef],
     resolvers: [
       User,
       Categories,
@@ -32,7 +34,8 @@ async function createApolloGraphQlServer() {
       Dashboard,
       Customer,
       Home,
-      ModalData
+      ModalData,
+      States
     ],
     
   });
