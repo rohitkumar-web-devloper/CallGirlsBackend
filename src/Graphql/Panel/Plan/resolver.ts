@@ -81,7 +81,6 @@ const Plan: IResolvers<any, any> = {
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
-      console.log(data, 'pppppppppppp');
       let profileUrl = null;
       const folder = 'plans';
       if (data.image) {
@@ -94,7 +93,6 @@ const Plan: IResolvers<any, any> = {
         }
       }
       const result: any = await db.Plan.create({ ...data, image: profileUrl });
-      console.log(result, 'ppppppppp');
       for (let index = 0; index < data.timeSlots.length; index++) {
         await db.PlanSlot.create({ planId: result.id, timeSlotId: data.timeSlots[index] })
       }

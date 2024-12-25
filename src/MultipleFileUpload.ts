@@ -3,11 +3,13 @@ import fs from "fs";
 
 const ensureFolderExists = (folderPath: string) => {
   if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath, { recursive: true });  
+    fs.mkdirSync(folderPath, { recursive: true });
   }
 };
 
-const uploadFile = async (file: any, folderName: string) => {
+const SERVER_URL = "http://localhost:7575";
+
+const uploadFile = async (file: any, folderName: string): Promise<string> => {
   try {
     const { createReadStream, filename, mimetype } = await file;
 
@@ -27,21 +29,21 @@ const uploadFile = async (file: any, folderName: string) => {
       out.on("error", reject);
     });
 
-    return filePath;
+    const fileUrl = `${SERVER_URL}/uploads/${folderName}/${filename}`;
+    return fileUrl;
   } catch (err) {
     console.error("Error processing file:", err);
     throw new Error("File upload failed");
   }
 };
 
-// Function to handle multiple file uploads
-const MultipleFileUpload = async (profile: any[], folderName: string) => {
+const MultipleFileUpload = async (profile: any[], folderName: string): Promise<string[]> => {
   const fileUrls = [];
 
   if (profile && Array.isArray(profile)) {
     for (const file of profile) {
-      const filePath = await uploadFile(file, folderName);  // Process each file
-      fileUrls.push(filePath);
+      const fileUrl = await uploadFile(file, folderName);
+      fileUrls.push(fileUrl);
     }
   }
 
