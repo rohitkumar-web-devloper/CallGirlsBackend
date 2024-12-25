@@ -21,6 +21,9 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
+      email: {
+        type: Sequelize.STRING
+      },
       price: {
         type: Sequelize.INTEGER
       },

@@ -5,6 +5,8 @@ module.exports = {
     await queryInterface.createTable('PlanSlots', {
       id: {
         allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
         type: Sequelize.INTEGER
       },
       planId: {
@@ -14,7 +16,6 @@ module.exports = {
       timeSlotId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true, // Set timeSlotId as the primary key
       },
       createdAt: {
         allowNull: false,

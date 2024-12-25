@@ -14,12 +14,19 @@ const Plan: IResolvers<any, any> = {
       if (!user) {
         throw new Error("Unauthorized");
       }
-      const whereConditions: any = {};
+      let whereConditions: any = {};
       if (filter && filter.search) {
         whereConditions[Op.or] = [
           { name: { [Op.like]: `%${filter.search}%` } },
           { description: { [Op.like]: `%${filter.search}%` } },
         ];
+      }
+
+      if (filter && filter.status) {
+        whereConditions ={
+          ...whereConditions,
+          status: filter.status
+        }
       }
       const offset = (page - 1) * pageSize;
       const plans: any = await db.Plan.findAll({
@@ -67,12 +74,14 @@ const Plan: IResolvers<any, any> = {
       });
     },
   },
+  
   Mutation: {
     createPlan: async (_: any, data: PlanAttributes | any, context: any) => {
       const { user } = context;
       if (!user) {
         throw new ApolloError("Unauthorized", "Unauthorized");
       }
+      console.log(data, 'pppppppppppp');
       let profileUrl = null;
       const folder = 'plans';
       if (data.image) {
@@ -85,6 +94,7 @@ const Plan: IResolvers<any, any> = {
         }
       }
       const result: any = await db.Plan.create({ ...data, image: profileUrl });
+      console.log(result, 'ppppppppp');
       for (let index = 0; index < data.timeSlots.length; index++) {
         await db.PlanSlot.create({ planId: result.id, timeSlotId: data.timeSlots[index] })
       }
@@ -94,7 +104,14 @@ const Plan: IResolvers<any, any> = {
           {
             model: db.PlanSlot,
             as: 'timeSlots',
-            attributes: ['planId', 'timeSlotId']
+            attributes: ['planId', 'timeSlotId'],
+            include: [
+              {
+                model: db.TimeSlots,
+                as: 'slots',
+                attributes: ['startTime', 'endTime'],
+              }
+            ]
           },
         ],
       })
@@ -148,7 +165,7 @@ const Plan: IResolvers<any, any> = {
           ],
         });
       } else {
-        return { message: 'Plan Not Found', success: false }
+        throw new ApolloError("Plan not exist", "Plan not exist");
       }
     },
     deletePlan: async (_: any, { id }: UserAttributes, context: any) => {

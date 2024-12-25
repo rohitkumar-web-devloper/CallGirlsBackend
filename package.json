@@ -7,7 +7,7 @@
     "start": "nodemon --legacy-watch ./src/index.ts",
     "dev": "ts-node src/index.ts",
     "build": "tsc",
-    "db:migrate": "npm run build && sequelize-cli db:migrate"
+    "db:migrate": "npx sequelize-cli db:migrate"
   },
   "keywords": [],
   "author": "",

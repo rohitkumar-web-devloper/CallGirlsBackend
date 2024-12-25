@@ -36,6 +36,7 @@ const planDefs = gql`
 
   input PlanFilter {
     search: String
+    status:Boolean
   }
 
   type Query {
