@@ -37,7 +37,6 @@ scalar Upload
     createdAt: DateTime
     updatedAt: DateTime
     message: String
-    success: Boolean
   }
   type Response{
     message: String
@@ -73,7 +72,7 @@ scalar Upload
   }
 
   type Query {
-    ads: [Ads]
+    ads(createdById:Int):[Ads]
     ad(id: ID!): Ads
     normalAds:[Ads]
     premiumAds:[Ads]

@@ -9,13 +9,23 @@ import moment from 'moment';
 const Ads: IResolvers<any, any> = {
   Upload: GraphQLUpload,
   Query: {
-    ads: async (_: any, __: any, context: any) => {
+    ads: async (_: any, data: any, context: any) => {
       const { user } = context;
       if (!user) {
         throw new Error("Unauthorized");
       }
+      let whereConditions: any = {};
+      if (data.createdById) {
+        whereConditions = {
+          ...whereConditions,
+          createdById: data.createdById
+        }
+      }
+      
       try {
-        const ads: any = await db.Ads.findAll()
+        const ads: any = await db.Ads.findAll({
+          where: whereConditions
+        })
         return ads.map((ad: any) => ({
           ...ad.toJSON(),
           services: Array(ad.services),
@@ -96,10 +106,10 @@ const Ads: IResolvers<any, any> = {
         const duration = moment.duration(5, 'hours').add(30, 'minutes');
         // Start of the current hour
         const startHour = currentTime.clone().startOf('hour');
-        const startHourWithOffset = startHour.subtract(duration).format('HH:mm:ss'); 
+        const startHourWithOffset = startHour.subtract(duration).format('HH:mm:ss');
         // End of the current hour
         const endHour = currentTime.clone().endOf('hour');
-        const endHourWithOffset = endHour.subtract(duration).format('HH:mm:ss'); 
+        const endHourWithOffset = endHour.subtract(duration).format('HH:mm:ss');
 
         const ads: any = await db.Ads.findAll({
           where: {
@@ -121,7 +131,7 @@ const Ads: IResolvers<any, any> = {
               },
               {
                 endTime: {
-                  [Op.between]: [startHourWithOffset, endHourWithOffset], 
+                  [Op.between]: [startHourWithOffset, endHourWithOffset],
                 },
               },
             ],
