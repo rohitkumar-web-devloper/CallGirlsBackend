@@ -74,10 +74,9 @@ scalar Upload
   type Query {
     ads(createdById:Int):[Ads]
     ad(id: ID!): Ads
-    normalAds:[Ads]
+    normalAds(categoryId:Int , state:String, city:String, ethnicity:String , nationality:String , breast:String , hair:String , services:[String] , attentionTo:[String], placeOfService:[String]):[Ads]
     premiumAds:[Ads]
   }
-
   type Mutation {
     createAd( input: AdInput ,  profile: [Upload]): Ads
     updateAd(id: Int, input: AdInput ,): Ads

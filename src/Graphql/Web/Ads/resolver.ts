@@ -21,7 +21,7 @@ const Ads: IResolvers<any, any> = {
           createdById: data.createdById
         }
       }
-      
+
       try {
         const ads: any = await db.Ads.findAll({
           where: whereConditions
@@ -57,13 +57,41 @@ const Ads: IResolvers<any, any> = {
       }
     },
 
-    normalAds: async (_: any, __: any, context: any) => {
+    normalAds: async (_: any, data: any, context: any) => {
+      console.log(data, 'lllll');
+      let whereCondition: any = {}
+      if (data.categoryId) {
+        whereCondition = {
+          ...whereCondition,
+          categoryId: data.categoryId
+        }
+      }
+      if (data.state) {
+        whereCondition = {
+          ...whereCondition,
+          state: data.state
+        }
+      }
+      if (data.city) {
+        whereCondition = {
+          ...whereCondition,
+          city: data.city
+        }
+      }
+      if (data.services) {
+        whereCondition = {
+          ...whereCondition,
+          services: data.services
+        }
+      }
+      console.log(whereCondition, '---------------whrer');
       try {
         const maxPriceRecord: any = await db.Plan.findOne({
           attributes: [[Sequelize.fn('MAX', Sequelize.col('price')), 'maxPrice']],
         });
         const ads: any = await db.Ads.findAll({
           where: {
+            ...whereCondition,
             [Op.or]: [
               {
                 [Op.and]: [
@@ -125,15 +153,20 @@ const Ads: IResolvers<any, any> = {
                 },
               },
               {
-                startTime: {
-                  [Op.between]: [startHourWithOffset, endHourWithOffset],
-                },
+                [Op.or]: [
+                  {
+                    startTime: {
+                      [Op.between]: [startHourWithOffset, endHourWithOffset],
+                    },
+                  },
+                  {
+                    endTime: {
+                      [Op.between]: [startHourWithOffset, endHourWithOffset],
+                    },
+                  },
+                ]
               },
-              {
-                endTime: {
-                  [Op.between]: [startHourWithOffset, endHourWithOffset],
-                },
-              },
+
             ],
           },
         });
@@ -161,6 +194,7 @@ const Ads: IResolvers<any, any> = {
         throw new UserInputError("No files uploaded. Please upload at least one image.");
       }
       let fileUrls = await MultipleFileUpload(data.profile, 'Ads');
+
       const result = await db.Ads.create({ ...data.input, createdById: user.id, createdByName: user.name, profile: fileUrls });
       if (result) {
         return { ...result.dataValues, message: "Ad Created Successfully", success: true }
