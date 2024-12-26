@@ -75,6 +75,8 @@ scalar Upload
   type Query {
     ads: [Ads]
     ad(id: ID!): Ads
+    normalAds:[Ads]
+    premiumAds:[Ads]
   }
 
   type Mutation {

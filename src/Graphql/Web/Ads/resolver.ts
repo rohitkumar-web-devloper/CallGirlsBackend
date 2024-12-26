@@ -4,6 +4,8 @@ import { AdsAttributes } from "../../../models/ads"
 import { GraphQLUpload } from "graphql-upload-ts";
 import MultipleFileUpload from "../../../MultipleFileUpload";
 import { ApolloError, UserInputError } from "apollo-server-express";
+import { Op, Sequelize } from "sequelize";
+import moment from 'moment';
 const Ads: IResolvers<any, any> = {
   Upload: GraphQLUpload,
   Query: {
@@ -39,6 +41,100 @@ const Ads: IResolvers<any, any> = {
           placeOfService: Array(ad.placeOfService),
           paymentMethod: Array(ad.paymentMethod)
         };
+      } catch (error) {
+        console.error("Error fetching ads:", error);
+        throw new Error("Failed to fetch ads");
+      }
+    },
+
+    normalAds: async (_: any, __: any, context: any) => {
+      try {
+        const maxPriceRecord: any = await db.Plan.findOne({
+          attributes: [[Sequelize.fn('MAX', Sequelize.col('price')), 'maxPrice']],
+        });
+        const ads: any = await db.Ads.findAll({
+          where: {
+            [Op.or]: [
+              {
+                [Op.and]: [
+                  {
+                    price: {
+                      [Op.lte]: maxPriceRecord.dataValues.maxPrice,
+                    },
+                  },
+                  {
+                    createdAt: {
+                      [Op.lte]: new Date(new Date().setDate(new Date().getDate() - 30)),
+                    },
+                  },
+                ],
+              },
+              {
+                price: 0,
+              },
+            ],
+          },
+        });
+
+        return ads.map((ad: any) => ({
+          ...ad.toJSON(),
+          services: Array(ad.services),
+          profile: Array(ad.profile),
+          attentionTo: Array(ad.attentionTo),
+          placeOfService: Array(ad.placeOfService),
+          paymentMethod: Array(ad.paymentMethod)
+        }));
+      } catch (error) {
+        console.error("Error fetching ads:", error);
+        throw new Error("Failed to fetch ads");
+      }
+    },
+    premiumAds: async (_: any, __: any, context: any) => {
+      try {
+        const currentTime = moment();
+        // Subtract 5 hours and 30 minutes (time duration)
+        const duration = moment.duration(5, 'hours').add(30, 'minutes');
+        // Start of the current hour
+        const startHour = currentTime.clone().startOf('hour');
+        const startHourWithOffset = startHour.subtract(duration).format('HH:mm:ss'); 
+        // End of the current hour
+        const endHour = currentTime.clone().endOf('hour');
+        const endHourWithOffset = endHour.subtract(duration).format('HH:mm:ss'); 
+
+        const ads: any = await db.Ads.findAll({
+          where: {
+            [Op.and]: [
+              {
+                price: {
+                  [Op.gte]: 0,
+                },
+              },
+              {
+                createdAt: {
+                  [Op.lte]: new Date(new Date().setDate(new Date().getDate() + 30)), // Set to 30 days from now
+                },
+              },
+              {
+                startTime: {
+                  [Op.between]: [startHourWithOffset, endHourWithOffset],
+                },
+              },
+              {
+                endTime: {
+                  [Op.between]: [startHourWithOffset, endHourWithOffset], 
+                },
+              },
+            ],
+          },
+        });
+        return ads.map((ad: any) => ({
+          ...ad.toJSON(),
+          services: Array(ad.services),
+          profile: Array(ad.profile),
+          attentionTo: Array(ad.attentionTo),
+          placeOfService: Array(ad.placeOfService),
+          paymentMethod: Array(ad.paymentMethod)
+        }));
       } catch (error) {
         console.error("Error fetching ads:", error);
         throw new Error("Failed to fetch ads");
@@ -110,6 +206,6 @@ const Ads: IResolvers<any, any> = {
     },
   },
 };
-  
+
 export default Ads;
 

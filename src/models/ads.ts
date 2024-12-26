@@ -94,11 +94,11 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
           type: DataTypes.INTEGER,
         },
         startTime: {
-          type: DataTypes.DATE,
+          type: DataTypes.TIME,
           allowNull: false
         },
         endTime: {
-          type: DataTypes.DATE,
+          type: DataTypes.TIME,
           allowNull: false
         },
         price: {
