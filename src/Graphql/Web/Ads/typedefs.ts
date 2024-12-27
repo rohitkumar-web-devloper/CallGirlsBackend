@@ -29,15 +29,17 @@ scalar Upload
     pricePerHour: String
     createdById: Int
     createdByName: String
-    services: [String]
-    attentionTo: [String]
+    services: [Service!]!
+    attentionTo: [Service!]!
     profile: [String!]!
-    placeOfService: [String]
+    placeOfServices: [Service!]!
     paymentMethod: [String]
     createdAt: DateTime
     updatedAt: DateTime
-    message: String
   }
+  type Service {
+  name: String
+}
   type Response{
     message: String
     success: Boolean
@@ -70,12 +72,30 @@ scalar Upload
     placeOfService: [String]
     paymentMethod: [String]
   }
-
+  type PaginatedAds {
+    ads: [Ads]
+    totalCount: Int
+    page: Int
+    pageSize: Int
+    totalPages: Int
+  }
+  input AdsFilter {
+    categoryId:Int ,
+    state:String,
+    city:String,
+    ethnicity:String , 
+    nationality:String , 
+    breast:String ,
+    hair:String ,
+    services:[String] ,
+    attentionTo:[String], 
+    placeOfService:[String]
+  }
   type Query {
     ads(createdById:Int):[Ads]
     ad(id: ID!): Ads
-    normalAds(categoryId:Int , state:String, city:String, ethnicity:String , nationality:String , breast:String , hair:String , services:[String] , attentionTo:[String], placeOfService:[String]):[Ads]
-    premiumAds:[Ads]
+    normalAds(page: Int, pageSize: Int, filter: AdsFilter):PaginatedAds
+    premiumAds(page: Int, pageSize: Int, filter: AdsFilter):PaginatedAds
   }
   type Mutation {
     createAd( input: AdInput ,  profile: [Upload]): Ads

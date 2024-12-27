@@ -84,18 +84,10 @@ module.exports = {
       createdByName: {
         type: Sequelize.STRING,
       },
-      services: {
-        type: Sequelize.JSON
-      },
-      attentionTo: {
-        type: Sequelize.JSON
-      },
       profile: {
         type: Sequelize.JSON
       },
-      placeOfService: {
-        type: Sequelize.JSON
-      },
+    
       paymentMethod: {
         type: Sequelize.JSON
       },

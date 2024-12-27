@@ -39,7 +39,6 @@ const Ads: IResolvers<any, any> = {
         throw new Error("Failed to fetch ads");
       }
     },
-
     ad: async (_: any, { id }: AdsAttributes) => {
       try {
         const ad: any = await db.Ads.findOne({ where: { id } })
@@ -56,35 +55,51 @@ const Ads: IResolvers<any, any> = {
         throw new Error("Failed to fetch ads");
       }
     },
-
-    normalAds: async (_: any, data: any, context: any) => {
-      console.log(data, 'lllll');
+    normalAds: async (_: any, { page = 1, pageSize = 10, filter }: any, context: any) => {
       let whereCondition: any = {}
-      if (data.categoryId) {
+      if (filter.categoryId) {
         whereCondition = {
           ...whereCondition,
-          categoryId: data.categoryId
+          categoryId: filter.categoryId
         }
       }
-      if (data.state) {
+      if (filter.state) {
         whereCondition = {
           ...whereCondition,
-          state: data.state
+          state: filter.state
         }
       }
-      if (data.city) {
+      if (filter.city) {
         whereCondition = {
           ...whereCondition,
-          city: data.city
+          city: filter.city
         }
       }
-      if (data.services) {
+      if (filter.hair) {
         whereCondition = {
           ...whereCondition,
-          services: data.services
+          hair: filter.hair
         }
       }
-      console.log(whereCondition, '---------------whrer');
+      if (filter.nationality) {
+        whereCondition = {
+          ...whereCondition,
+          nationality: filter.nationality
+        }
+      }
+      if (filter.ethnicity) {
+        whereCondition = {
+          ...whereCondition,
+          ethnicity: filter.ethnicity
+        }
+      }
+      if (filter.breast) {
+        whereCondition = {
+          ...whereCondition,
+          breast: filter.breast
+        }
+      }
+      const offset = (page - 1) * pageSize;
       try {
         const maxPriceRecord: any = await db.Plan.findOne({
           attributes: [[Sequelize.fn('MAX', Sequelize.col('price')), 'maxPrice']],
@@ -112,35 +127,104 @@ const Ads: IResolvers<any, any> = {
               },
             ],
           },
+          include: [
+            {
+              model: db.Service,
+              as: 'services',
+              attributes: ['name'],
+              where: filter.services && filter.services.length > 0
+                ? { name: { [Op.in]: filter.services } }
+                : undefined,
+            },
+            {
+              model: db.AttentionTo,
+              as: 'attentionTo',
+              attributes: ['name'],
+              where: filter.attentionTo && filter.attentionTo.length > 0
+                ? { name: { [Op.in]: filter.attentionTo } }
+                : undefined,
+            },
+            {
+              model: db.PlaceOfService,
+              as: 'placeOfServices',
+              attributes: ['name'],
+              where: filter.placeOfService && filter.placeOfService.length > 0
+                ? { name: { [Op.in]: filter.placeOfService } }
+                : undefined,
+            },
+          ],
+          limit: pageSize,
+          offset,
         });
-
-        return ads.map((ad: any) => ({
+        const filterAds = ads.map((ad: any) => ({
           ...ad.toJSON(),
-          services: Array(ad.services),
+          services: Array(...ad.services),
           profile: Array(ad.profile),
-          attentionTo: Array(ad.attentionTo),
-          placeOfService: Array(ad.placeOfService),
+          attentionTo: Array(...ad.attentionTo),
+          placeOfServices: Array(...ad.placeOfServices),
           paymentMethod: Array(ad.paymentMethod)
         }));
+        return { ads: filterAds }
       } catch (error) {
         console.error("Error fetching ads:", error);
         throw new Error("Failed to fetch ads");
       }
     },
-    premiumAds: async (_: any, __: any, context: any) => {
+    premiumAds: async (_: any, { page = 1, pageSize = 10, filter }: any, context: any) => {
       try {
         const currentTime = moment();
-        // Subtract 5 hours and 30 minutes (time duration)
         const duration = moment.duration(5, 'hours').add(30, 'minutes');
-        // Start of the current hour
         const startHour = currentTime.clone().startOf('hour');
         const startHourWithOffset = startHour.subtract(duration).format('HH:mm:ss');
-        // End of the current hour
         const endHour = currentTime.clone().endOf('hour');
         const endHourWithOffset = endHour.subtract(duration).format('HH:mm:ss');
-
+        let whereCondition: any = {}
+        if (filter.categoryId) {
+          whereCondition = {
+            ...whereCondition,
+            categoryId: filter.categoryId
+          }
+        }
+        if (filter.state) {
+          whereCondition = {
+            ...whereCondition,
+            state: filter.state
+          }
+        }
+        if (filter.city) {
+          whereCondition = {
+            ...whereCondition,
+            city: filter.city
+          }
+        }
+        if (filter.hair) {
+          whereCondition = {
+            ...whereCondition,
+            hair: filter.hair
+          }
+        }
+        if (filter.nationality) {
+          whereCondition = {
+            ...whereCondition,
+            nationality: filter.nationality
+          }
+        }
+        if (filter.ethnicity) {
+          whereCondition = {
+            ...whereCondition,
+            ethnicity: filter.ethnicity
+          }
+        }
+        if (filter.breast) {
+          whereCondition = {
+            ...whereCondition,
+            breast: filter.breast
+          }
+        }
+        const offset = (page - 1) * pageSize;
         const ads: any = await db.Ads.findAll({
           where: {
+            ...whereCondition,
             [Op.and]: [
               {
                 price: {
@@ -169,15 +253,45 @@ const Ads: IResolvers<any, any> = {
 
             ],
           },
+          include: [
+            {
+              model: db.Service,
+              as: 'services',
+              attributes: ['name'],
+              where: filter.services && filter.services.length > 0
+                ? { name: { [Op.in]: filter.services } }
+                : undefined,
+            },
+            {
+              model: db.AttentionTo,
+              as: 'attentionTo',
+              attributes: ['name'],
+              where: filter.attentionTo && filter.attentionTo.length > 0
+                ? { name: { [Op.in]: filter.attentionTo } }
+                : undefined,
+            },
+            {
+              model: db.PlaceOfService,
+              as: 'placeOfServices',
+              attributes: ['name'],
+              where: filter.placeOfService && filter.placeOfService.length > 0
+                ? { name: { [Op.in]: filter.placeOfService } }
+                : undefined,
+            },
+          ],
+          limit: pageSize,
+          offset,
         });
-        return ads.map((ad: any) => ({
+
+        const filterAds = ads.map((ad: any) => ({
           ...ad.toJSON(),
-          services: Array(ad.services),
+          services: Array(...ad.services),
           profile: Array(ad.profile),
-          attentionTo: Array(ad.attentionTo),
-          placeOfService: Array(ad.placeOfService),
+          attentionTo: Array(...ad.attentionTo),
+          placeOfServices: Array(...ad.placeOfServices),
           paymentMethod: Array(ad.paymentMethod)
         }));
+        return { ads: filterAds }
       } catch (error) {
         console.error("Error fetching ads:", error);
         throw new Error("Failed to fetch ads");
@@ -195,9 +309,46 @@ const Ads: IResolvers<any, any> = {
       }
       let fileUrls = await MultipleFileUpload(data.profile, 'Ads');
 
-      const result = await db.Ads.create({ ...data.input, createdById: user.id, createdByName: user.name, profile: fileUrls });
-      if (result) {
-        return { ...result.dataValues, message: "Ad Created Successfully", success: true }
+      const result: any = await db.Ads.create({ ...data.input, createdById: user.id, createdByName: user.name, profile: fileUrls });
+      for (let i = 0; i < data.input.services.length; i++) {
+        await db.Service.create({ adId: result.id, name: data.input.services[i] })
+      }
+      for (let i = 0; i < data.input.attentionTo.length; i++) {
+        await db.AttentionTo.create({ adId: result.id, name: data.input.attentionTo[i] })
+      }
+      for (let i = 0; i < data.input.placeOfService.length; i++) {
+        await db.PlaceOfService.create({ adId: result.id, name: data.input.placeOfService[i] })
+      }
+      const ads: any = await db.Ads.findOne({
+        where: {
+          id: result.id
+        },
+        include: [
+          {
+            model: db.Service,
+            as: 'services',
+            attributes: ['name'],
+          },
+          {
+            model: db.AttentionTo,
+            as: 'attentionTo',
+            attributes: ['name'],
+          },
+          {
+            model: db.PlaceOfService,
+            as: 'placeOfServices',
+            attributes: ['name'],
+          },
+        ],
+
+      });
+      return {
+        ...ads.toJSON(),
+        services: Array(...ads.services),
+        profile: Array(ads.profile),
+        attentionTo: Array(...ads.attentionTo),
+        placeOfServices: Array(...ads.placeOfServices),
+        paymentMethod: Array(ads.paymentMethod)
       }
     },
     updateAd: async (_: any, data: AdsAttributes, context: any) => {
@@ -226,13 +377,64 @@ const Ads: IResolvers<any, any> = {
       exist.hair = data.hair
       exist.bodyType = data.bodyType
       exist.pricePerHour = data.pricePerHour
-      exist.services = data.services
-      exist.attentionTo = data.attentionTo
       exist.profile = data.profile
-      exist.placeOfService = data.placeOfService
       exist.paymentMethod = data.paymentMethod
       await exist.save()
-      return { ...exist.dataValues, message: "Ad Deleted Successfully", success: true }
+      await db.Service.destroy({
+        where: {
+          adId: data.id
+        }
+      })
+      await db.AttentionTo.destroy({
+        where: {
+          adId: data.id
+        }
+      })
+      await db.PlaceOfService.destroy({
+        where: {
+          adId: data.id
+        }
+      })
+      for (let i = 0; i < data.services.length; i++) {
+        await db.Service.create({ adId: data.id, name: data.services[i] })
+      }
+      for (let i = 0; i < data.attentionTo.length; i++) {
+        await db.AttentionTo.create({ adId: data.id, name: data.attentionTo[i] })
+      }
+      for (let i = 0; i < data.placeOfService.length; i++) {
+        await db.PlaceOfService.create({ adId: data.id, name: data.placeOfService[i] })
+      }
+      const ads: any = await db.Ads.findOne({
+        where: {
+          id: data.id
+        },
+        include: [
+          {
+            model: db.Service,
+            as: 'services',
+            attributes: ['name'],
+          },
+          {
+            model: db.AttentionTo,
+            as: 'attentionTo',
+            attributes: ['name'],
+          },
+          {
+            model: db.PlaceOfService,
+            as: 'placeOfServices',
+            attributes: ['name'],
+          },
+        ],
+
+      });
+      return {
+        ...ads.toJSON(),
+        services: Array(...ads.services),
+        profile: Array(ads.profile),
+        attentionTo: Array(...ads.attentionTo),
+        placeOfServices: Array(...ads.placeOfServices),
+        paymentMethod: Array(ads.paymentMethod)
+      }
     },
     deleteAd: async (_: any, data: AdsAttributes, context: any) => {
       const { user } = context;

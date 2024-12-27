@@ -7,7 +7,7 @@ export interface AdsAttributes {
   planId: number;
   startTime: string;
   endTime: string;
-  price:number;
+  price: number;
   email: string;
   category: string;
   categoryId: number;
@@ -28,10 +28,7 @@ export interface AdsAttributes {
   pricePerHour: string;
   createdById: number
   createdByName: string
-  services: string[];
-  attentionTo: string[];
   profile: any[];
-  placeOfService: string[];
   paymentMethod: string[];
 
 }
@@ -67,11 +64,7 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
   public pricePerHour!: string;
   public createdById!: number
   public createdByName!: string
-  public services!: string[];
-  public attentionTo!: string[];
   public profile!: string[];
-
-  public placeOfService!: string[];
   public paymentMethod!: string[];
 
   // Timestamps
@@ -80,6 +73,9 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
 
   static associate(models: any) {
     Ads.belongsTo(models.Categories, { foreignKey: 'categoryId', as: 'categoryAssociation' });
+    Ads.hasMany(models.Service, { foreignKey: 'adId', as: 'services' });
+    Ads.hasMany(models.AttentionTo, { foreignKey: 'adId', as: 'attentionTo' });
+    Ads.hasMany(models.PlaceOfService, { foreignKey: 'adId', as: 'placeOfServices' });
   }
 
   static initModel(sequelize: Sequelize): typeof Ads {
@@ -187,22 +183,11 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
           type: DataTypes.STRING,
           allowNull: false
         },
-        services: {
-          type: DataTypes.JSON,
-          allowNull: false,
-        },
-        attentionTo: {
-          type: DataTypes.JSON,
-          allowNull: false,
-        },
         profile: {
           type: DataTypes.JSON,
           allowNull: false,
         },
-        placeOfService: {
-          type: DataTypes.JSON,
-          allowNull: false,
-        },
+
         paymentMethod: {
           type: DataTypes.JSON,
           allowNull: false,
