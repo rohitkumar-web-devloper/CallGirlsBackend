@@ -179,6 +179,8 @@ const Ads: IResolvers<any, any> = {
         const endHour = currentTime.clone().endOf('hour');
         const endHourWithOffset = endHour.subtract(duration).format('HH:mm:ss');
         let whereCondition: any = {}
+        console.log([startHourWithOffset, endHourWithOffset],moment(new Date()).format('HH:mm:ss'),moment(new Date()).add(1,"hour").format('HH:mm:ss'));
+        
         if (filter.categoryId) {
           whereCondition = {
             ...whereCondition,
@@ -237,15 +239,15 @@ const Ads: IResolvers<any, any> = {
                 },
               },
               {
-                [Op.or]: [
+                [Op.and]: [
                   {
                     startTime: {
-                      [Op.between]: [startHourWithOffset, endHourWithOffset],
+                      [Op.lte]: moment(new Date()).format('HH:mm:ss'),
                     },
                   },
                   {
                     endTime: {
-                      [Op.between]: [startHourWithOffset, endHourWithOffset],
+                      [Op.gte]:moment(new Date()).format('HH:mm:ss'),
                     },
                   },
                 ]
