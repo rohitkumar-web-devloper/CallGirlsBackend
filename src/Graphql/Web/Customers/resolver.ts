@@ -71,7 +71,7 @@ const Customer: IResolvers<any, any> = {
         if (!await passwordCompare(data.password, exist.password)) {
           throw new ApolloError("Password not match", "Password not match");
         }
-        exist.token = await generateToken({ id: exist.id, name: exist.name });
+        exist.token = await generateToken({ id: exist.id, name: exist.firstName });
         await exist.save();
         return { message: "Customer Login Successfully", success: true, ...exist.dataValues }
       }
