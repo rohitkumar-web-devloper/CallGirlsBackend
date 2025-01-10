@@ -46,6 +46,7 @@ scalar Upload
   }
   input AdInput {
     planId: Int
+    planType:String
     startTime: DateTime
     endTime: DateTime
     price: Int
