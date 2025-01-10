@@ -5,6 +5,7 @@ export interface AdsAttributes {
   [x: string]: any;
   id: number;
   planId: number;
+  planType: string;
   startTime: string;
   endTime: string;
   price: number;
@@ -41,6 +42,7 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
   [x: string]: any;
   public id!: number;
   public planId!: number;
+  public planType!: string;
   public startTime!: string;
   public endTime!: string;
   public price!: number;
@@ -88,6 +90,9 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
         },
         planId: {
           type: DataTypes.INTEGER,
+        },
+        planType: {
+          type: DataTypes.STRING,
         },
         startTime: {
           type: DataTypes.TIME,

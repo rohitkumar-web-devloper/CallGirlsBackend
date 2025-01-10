@@ -117,14 +117,14 @@ const Ads: IResolvers<any, any> = {
       const offset = (page - 1) * pageSize;
       try {
         const maxPriceRecord: any = await db.Plan.findOne({
-          attributes: [[Sequelize.fn('MAX', Sequelize.col('price')), 'maxPrice']],
+          attributes: [[Sequelize.fn('MAX', Sequelize.col('price')), 'maxPrice'] , ],
         });
         const ads: any = await db.Ads.findAll({
           where: {
             ...whereCondition,
             [Op.or]: [
               {
-                [Op.and]: [
+                [Op.or]: [
                   {
                     price: {
                       [Op.lte]: maxPriceRecord.dataValues.maxPrice,
@@ -139,6 +139,7 @@ const Ads: IResolvers<any, any> = {
               },
               {
                 price: 0,
+                planType:'normal'
               },
             ],
           },

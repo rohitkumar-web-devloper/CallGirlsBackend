@@ -13,6 +13,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true
       },
+      planType: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       startTime: {
         type: Sequelize.TIME,
         allowNull: false
