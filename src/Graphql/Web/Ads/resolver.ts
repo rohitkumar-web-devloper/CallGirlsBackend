@@ -14,18 +14,33 @@ const Ads: IResolvers<any, any> = {
       if (!user) {
         throw new Error("Unauthorized");
       }
-      let whereConditions: any = {};
-      if (data.createdById) {
-        whereConditions = {
-          ...whereConditions,
-          createdById: data.createdById
-        }
-      }
+
 
       try {
         const ads: any = await db.Ads.findAll({
-          where: whereConditions
+          where: {
+            createdById: data.createdById
+          },
+          include: [
+            {
+              model: db.Service,
+              as: 'services',
+              attributes: ['name'],
+            },
+            {
+              model: db.AttentionTo,
+              as: 'attentionTo',
+              attributes: ['name'],
+            },
+            {
+              model: db.PlaceOfService,
+              as: 'placeOfServices',
+              attributes: ['name'],
+            },
+          ],
         })
+        console.log(ads,'pppp');
+        
         return ads.map((ad: any) => ({
           ...ad.toJSON(),
           services: Array(ad.services),
@@ -179,8 +194,7 @@ const Ads: IResolvers<any, any> = {
         const endHour = currentTime.clone().endOf('hour');
         const endHourWithOffset = endHour.subtract(duration).format('HH:mm:ss');
         let whereCondition: any = {}
-        console.log([startHourWithOffset, endHourWithOffset],moment(new Date()).format('HH:mm:ss'),moment(new Date()).add(1,"hour").format('HH:mm:ss'));
-        
+
         if (filter.categoryId) {
           whereCondition = {
             ...whereCondition,
@@ -247,7 +261,7 @@ const Ads: IResolvers<any, any> = {
                   },
                   {
                     endTime: {
-                      [Op.gte]:moment(new Date()).format('HH:mm:ss'),
+                      [Op.gte]: moment(new Date()).format('HH:mm:ss'),
                     },
                   },
                 ]
