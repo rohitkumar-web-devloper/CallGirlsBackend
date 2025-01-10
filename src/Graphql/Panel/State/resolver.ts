@@ -7,9 +7,9 @@ const States: IResolvers<any, any> = {
     Query: {
         states: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
             const { user } = context;
-            // if (!user) {
-            //     throw new ApolloError("Unauthorized", "Unauthorized");
-            // }
+            if (!user) {
+                throw new ApolloError("Unauthorized", "Unauthorized");
+            }
             const whereConditions: any = {};
             if (filter && filter.search) {
                 whereConditions[Op.or] = [
@@ -33,9 +33,9 @@ const States: IResolvers<any, any> = {
         },
         cities: async (_: any, { page = 1, pageSize = 10, filter, stateId }: { page: number, pageSize: number, filter?: any, stateId: number }, context: any) => {
             const { user } = context;
-            // if (!user) {
-            //     throw new ApolloError("Unauthorized", "Unauthorized");
-            // }
+            if (!user) {
+                throw new ApolloError("Unauthorized", "Unauthorized");
+            }
             const whereConditions: any = {
                 stateId
             };
@@ -63,18 +63,18 @@ const States: IResolvers<any, any> = {
         },
         modalStates: async (_: any, data: any, context: any) => {
             const { user } = context;
-            if (!user) {
-                throw new ApolloError("Unauthorized", "Unauthorized");
-            }
+            // if (!user) {
+            //     throw new ApolloError("Unauthorized", "Unauthorized");
+            // }
           
             return await db.State.findAll()
           
         },
         modalCities: async (_: any, { stateId }: { stateId: number }, context: any) => {
             const { user } = context;
-            if (!user) {
-                throw new ApolloError("Unauthorized", "Unauthorized");
-            }
+            // if (!user) {
+            //     throw new ApolloError("Unauthorized", "Unauthorized");
+            // }
             const whereConditions: any = {
                 stateId
             };
