@@ -6,6 +6,7 @@ import MultipleFileUpload from "../../../MultipleFileUpload";
 import { ApolloError, UserInputError } from "apollo-server-express";
 import { Op, Sequelize } from "sequelize";
 import moment from 'moment';
+import { log } from "node:console";
 const Ads: IResolvers<any, any> = {
   Upload: GraphQLUpload,
   Query: {
@@ -39,16 +40,19 @@ const Ads: IResolvers<any, any> = {
             },
           ],
         })
-        console.log(ads,'pppp');
-        
-        return ads.map((ad: any) => ({
-          ...ad.toJSON(),
-          services: Array(ad.services),
-          profile: Array(ad.profile),
-          attentionTo: Array(ad.attentionTo),
-          placeOfService: Array(ad.placeOfService),
-          paymentMethod: Array(ad.paymentMethod)
-        }));
+        return ads.map((ad: any) => {
+          const attentionData = ad.attentionTo ? ad?.attentionTo.map((item: any) => item.dataValues) : []
+          const servicesData = ad.services ? ad?.services.map((item: any) => item.dataValues) : []
+          const placeOfServicesData = ad.placeOfServices ? ad?.placeOfServices.map((item: any) => item.dataValues) : []
+          return {
+              ...ad.toJSON(),
+              services: servicesData,
+              profile: Array(ad.profile),
+              attentionTo: attentionData,
+              placeOfService: placeOfServicesData,
+              paymentMethod: Array(ad.paymentMethod),
+          };
+        });
       } catch (error) {
         console.error("Error fetching ads:", error);
         throw new Error("Failed to fetch ads");
@@ -117,7 +121,7 @@ const Ads: IResolvers<any, any> = {
       const offset = (page - 1) * pageSize;
       try {
         const maxPriceRecord: any = await db.Plan.findOne({
-          attributes: [[Sequelize.fn('MAX', Sequelize.col('price')), 'maxPrice'] , ],
+          attributes: [[Sequelize.fn('MAX', Sequelize.col('price')), 'maxPrice'],],
         });
         const ads: any = await db.Ads.findAll({
           where: {
@@ -139,7 +143,7 @@ const Ads: IResolvers<any, any> = {
               },
               {
                 price: 0,
-                planType:'normal'
+                planType: 'normal'
               },
             ],
           },

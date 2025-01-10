@@ -1,6 +1,7 @@
 import { ApolloError } from "apollo-server-express";
 import db from "../../../models";
 import { IResolvers } from "@graphql-tools/utils";
+import { Op } from "sequelize";
 const Dashboard: IResolvers<any, any> = {
     Query: {
         dashboard: async (_: any, data: any, context: any) => {
@@ -8,7 +9,13 @@ const Dashboard: IResolvers<any, any> = {
             if (!user) {
                 throw new ApolloError("Unauthorized", "Unauthorized");
             }
-            const userCount = await db.User.count();
+            const userCount = await db.User.count({
+                where: {
+                    id: {
+                        [Op.ne]: user.id,
+                    },
+                }
+            });
             const plan = await db.Plan.count();
             const ads = await db.Ads.count()
             const category = await db.Categories.count()

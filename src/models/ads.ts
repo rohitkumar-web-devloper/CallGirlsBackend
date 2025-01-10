@@ -78,6 +78,7 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
     Ads.hasMany(models.Service, { foreignKey: 'adId', as: 'services' });
     Ads.hasMany(models.AttentionTo, { foreignKey: 'adId', as: 'attentionTo' });
     Ads.hasMany(models.PlaceOfService, { foreignKey: 'adId', as: 'placeOfServices' });
+    
   }
 
   static initModel(sequelize: Sequelize): typeof Ads {
