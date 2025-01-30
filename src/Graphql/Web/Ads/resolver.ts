@@ -246,6 +246,7 @@ const Ads: IResolvers<any, any> = {
         const ads: any = await db.Ads.findAll({
           where: {
             ...whereCondition,
+              planType: 'premium',
             [Op.and]: [
               {
                 price: {
@@ -271,7 +272,6 @@ const Ads: IResolvers<any, any> = {
                   },
                 ]
               },
-
             ],
           },
           include: [
