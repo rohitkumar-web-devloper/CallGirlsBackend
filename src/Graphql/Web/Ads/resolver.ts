@@ -45,12 +45,12 @@ const Ads: IResolvers<any, any> = {
           const servicesData = ad.services ? ad?.services.map((item: any) => item.dataValues) : []
           const placeOfServicesData = ad.placeOfServices ? ad?.placeOfServices.map((item: any) => item.dataValues) : []
           return {
-              ...ad.toJSON(),
-              services: servicesData,
-              profile: Array(ad.profile),
-              attentionTo: attentionData,
-              placeOfService: placeOfServicesData,
-              paymentMethod: Array(ad.paymentMethod),
+            ...ad.toJSON(),
+            services: servicesData,
+            profile: Array(ad.profile),
+            attentionTo: attentionData,
+            placeOfService: placeOfServicesData,
+            paymentMethod: Array(ad.paymentMethod),
           };
         });
       } catch (error) {
@@ -126,6 +126,7 @@ const Ads: IResolvers<any, any> = {
         const ads: any = await db.Ads.findAll({
           where: {
             ...whereCondition,
+            planType: 'normal',
             [Op.or]: [
               {
                 [Op.or]: [
@@ -246,7 +247,7 @@ const Ads: IResolvers<any, any> = {
         const ads: any = await db.Ads.findAll({
           where: {
             ...whereCondition,
-              planType: 'premium',
+            planType: 'premium',
             [Op.and]: [
               {
                 price: {
