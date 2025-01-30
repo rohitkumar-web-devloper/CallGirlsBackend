@@ -6,6 +6,7 @@ scalar Upload
   type Ads {
     id: ID
     planId: Int
+    planType:String
     startTime: DateTime
     endTime: DateTime
     price: Int
