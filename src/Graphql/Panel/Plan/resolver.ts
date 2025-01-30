@@ -23,7 +23,7 @@ const Plan: IResolvers<any, any> = {
       }
 
       if (filter && filter.status) {
-        whereConditions ={
+        whereConditions = {
           ...whereConditions,
           status: filter.status
         }
@@ -47,6 +47,7 @@ const Plan: IResolvers<any, any> = {
         ],
         limit: pageSize,
         offset,
+        order: [['createdAt', 'DESC']],
       });
       const totalCount = await db.Plan.count({
         where: whereConditions,
@@ -74,7 +75,7 @@ const Plan: IResolvers<any, any> = {
       });
     },
   },
-  
+
   Mutation: {
     createPlan: async (_: any, data: PlanAttributes | any, context: any) => {
       const { user } = context;

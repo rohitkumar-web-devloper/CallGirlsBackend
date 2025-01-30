@@ -30,10 +30,12 @@ const TimeSlot: IResolvers<any, any> = {
           where: whereConditions,
           limit: pageSize,
           offset,
+          order: [['createdAt', 'DESC']],
         });
       } else {
         timeSlot = await db.TimeSlots.findAll({
           where: whereConditions,
+          order: [['createdAt', 'DESC']],
         });
 
       }

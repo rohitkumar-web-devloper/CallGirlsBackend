@@ -31,6 +31,7 @@ const Customer: IResolvers<any, any> = {
         where: whereConditions,
         limit: pageSize,
         offset,
+        order: [['createdAt', 'DESC']],
       });
 
       const totalCount = await db.Customer.count({
