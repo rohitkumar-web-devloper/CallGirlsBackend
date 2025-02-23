@@ -6,6 +6,7 @@ const categoriesDef = gql`
   type Category {
     id: ID
     name: String
+    handler:String
     image:String
     description:String
     status: Boolean
