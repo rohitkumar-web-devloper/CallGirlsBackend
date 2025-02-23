@@ -9,6 +9,7 @@ const HomeDef = gql`
   type Home {
     id: ID
     name: String
+    handler:String
     image: String
     description: String
     ads: [Ad] 
