@@ -1,13 +1,12 @@
 import path from "path";
 import fs from "fs";
-
+import {HOST} from "./constants/Variables";
 const ensureFolderExists = (folderPath: string) => {
   if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath, { recursive: true });
   }
 };
 
-const SERVER_URL = "https://node.lustloungh.com";
 
 const uploadFile = async (file: any, folderName: string): Promise<string> => {
   try {
@@ -29,7 +28,7 @@ const uploadFile = async (file: any, folderName: string): Promise<string> => {
       out.on("error", reject);
     });
 
-    const fileUrl = `${SERVER_URL}/uploads/${folderName}/${filename}`;
+    const fileUrl = `${HOST}/uploads/${folderName}/${filename}`;
     return fileUrl;
   } catch (err) {
     console.error("Error processing file:", err);
