@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const SERVER_URL = "http://localhost:7575";
+const SERVER_URL = "https://node.lustloungh.com";
 
 export const saveFileToServer = async (
   createReadStream: any,

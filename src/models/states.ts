@@ -42,7 +42,6 @@ class State extends Model<StateAttributes, StateCreationAttributes> implements S
       {
         sequelize,
         modelName: 'State',
-        tableName: 'states', // Explicitly define table name
         timestamps: true, // Enable createdAt and updatedAt
       }
     );

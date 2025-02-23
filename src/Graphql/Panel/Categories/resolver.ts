@@ -4,6 +4,7 @@ import { CategoriesAttributes } from '../../../models/categories'
 import { ApolloError } from "apollo-server";
 import { Op } from 'sequelize';
 import { saveFileToServer } from "../../../SaveFileToServer";
+import {formatString} from "../../../helpers";
 const Categories: IResolvers<any, any> = {
     Query: {
         categories: async (_: any, { page = 1, pageSize = 10, filter }: { page: number, pageSize: number, filter?: any }, context: any) => {
@@ -59,9 +60,11 @@ const Categories: IResolvers<any, any> = {
             if (!user) {
                 throw new Error("Unauthorized");
             }
+
             const exist = await db.Categories.findOne({
                 where: {
-                    name: data.name
+                    name: data.name,
+                    handler : formatString(data.name)
                 }
             })
             if (exist)
@@ -103,6 +106,7 @@ const Categories: IResolvers<any, any> = {
                 }
             }
             exist.name = data.name;
+            exist.handler = formatString(data.name);
             exist.image = profileUrl
             exist.description = data.description
             exist.status = data.status || exist.status;

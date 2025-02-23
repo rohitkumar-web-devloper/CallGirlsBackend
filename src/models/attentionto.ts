@@ -53,7 +53,6 @@ class AttentionTo
       {
         sequelize,
         modelName: 'AttentionTo',
-        tableName: 'attentionTos', // Explicitly define table name
         timestamps: true, // Enable createdAt and updatedAt
       }
     );

@@ -91,8 +91,7 @@ class Customer extends Model<CustomerAttributes, CustomerCreationAttributes> imp
       {
         sequelize,
         modelName: 'Customer',
-        tableName: 'customers',
-        timestamps: true, 
+        timestamps: true,
       }
     );
     return Customer;

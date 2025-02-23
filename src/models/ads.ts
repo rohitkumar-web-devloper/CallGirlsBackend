@@ -96,11 +96,11 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
           type: DataTypes.STRING,
         },
         startTime: {
-          type: DataTypes.TIME,
+          type: DataTypes.DATE,
           allowNull: false
         },
         endTime: {
-          type: DataTypes.TIME,
+          type: DataTypes.DATE,
           allowNull: false
         },
         price: {
@@ -202,7 +202,6 @@ class Ads extends Model<AdsAttributes, AdsCreationAttributes> implements AdsAttr
       {
         sequelize,
         modelName: 'Ads',
-        tableName: 'ads',
         timestamps: true,
       }
     );

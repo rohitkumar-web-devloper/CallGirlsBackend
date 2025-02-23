@@ -4,6 +4,7 @@ import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
 export interface CityAttributes {
   id?: number;
   name: string;
+  handler:string;
   stateId: number;
 }
 
@@ -14,6 +15,7 @@ type CityCreationAttributes = Optional<CityAttributes, 'id'>;
 class City extends Model<CityAttributes, CityCreationAttributes> implements CityAttributes {
   public id!: number;
   public name!: string;
+  public handler!: string;
   public stateId!: number;
  
 
@@ -41,6 +43,13 @@ class City extends Model<CityAttributes, CityCreationAttributes> implements City
             len: [2, 100], // City name length validation
           },
         },
+        handler: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          validate: {
+            len: [2, 100], // City name length validation
+          },
+        },
         stateId: {
           type: DataTypes.INTEGER,
           allowNull: false,
@@ -55,7 +64,6 @@ class City extends Model<CityAttributes, CityCreationAttributes> implements City
       {
         sequelize,
         modelName: 'City',
-        tableName: 'cities', // Explicitly define table name
         timestamps: true, // Enable createdAt and updatedAt
       }
     );

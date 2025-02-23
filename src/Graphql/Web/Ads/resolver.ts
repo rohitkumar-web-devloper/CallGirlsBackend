@@ -263,12 +263,12 @@ const Ads: IResolvers<any, any> = {
                 [Op.and]: [
                   {
                     startTime: {
-                      [Op.lte]: moment(new Date()).format('HH:mm:ss'),
+                      [Op.lte]: new Date(),
                     },
                   },
                   {
                     endTime: {
-                      [Op.gte]: moment(new Date()).format('HH:mm:ss'),
+                      [Op.gte]: new Date(),
                     },
                   },
                 ]

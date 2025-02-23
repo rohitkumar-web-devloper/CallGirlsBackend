@@ -52,7 +52,6 @@ class PlaceOfService
       {
         sequelize,
         modelName: 'PlaceOfService',
-        tableName: 'placeOfServices', // Explicitly define table name
         timestamps: true, // Enable createdAt and updatedAt
       }
     );

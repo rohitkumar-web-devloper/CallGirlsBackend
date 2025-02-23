@@ -47,7 +47,6 @@ class PlanSlot extends Model<PlanSlotAttributes, PlanSlotCreationAttributes>
       {
         sequelize,
         modelName: 'PlanSlot',
-        tableName: 'PlanSlots', // Explicitly define table name
         timestamps: true, // Enable createdAt and updatedAt
       }
     );

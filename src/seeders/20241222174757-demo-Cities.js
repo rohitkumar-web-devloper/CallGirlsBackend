@@ -581,7 +581,7 @@ module.exports = {
         updatedAt: new Date(),
       }));
     });
-    await queryInterface.bulkInsert('cities', citiesToInsert, {});
+    await queryInterface.bulkInsert('Cities', citiesToInsert, {});
   },
 
   async down(queryInterface, Sequelize) {

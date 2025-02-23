@@ -12,6 +12,9 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      handler:{
+        type:Sequelize.STRING
+      },
       stateId: {
         type: Sequelize.INTEGER
       },

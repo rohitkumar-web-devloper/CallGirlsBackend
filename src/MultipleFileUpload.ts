@@ -7,7 +7,7 @@ const ensureFolderExists = (folderPath: string) => {
   }
 };
 
-const SERVER_URL = "http://localhost:7575";
+const SERVER_URL = "https://node.lustloungh.com";
 
 const uploadFile = async (file: any, folderName: string): Promise<string> => {
   try {

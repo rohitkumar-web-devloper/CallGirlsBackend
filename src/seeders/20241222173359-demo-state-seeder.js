@@ -15,7 +15,7 @@ module.exports = {
     ];
     console.log(queryInterface.bulkInsert)
     const stateObjects = indianStates.map(stateName => ({ name: stateName, createdAt: new Date(), updatedAt: new Date(), }));
-    await queryInterface.bulkInsert('states', stateObjects, {});
+    await queryInterface.bulkInsert('States', stateObjects, {});
   },
 
   async down(queryInterface, Sequelize) {

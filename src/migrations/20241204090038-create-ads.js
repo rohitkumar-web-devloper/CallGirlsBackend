@@ -18,11 +18,11 @@ module.exports = {
         allowNull: true
       },
       startTime: {
-        type: Sequelize.TIME,
+        type: Sequelize.DATE,
         allowNull: false
       },
       endTime: {
-        type: Sequelize.TIME,
+        type: Sequelize.DATE,
         allowNull: false
       },
       email: {

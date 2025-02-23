@@ -81,7 +81,6 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
       {
         sequelize,
         modelName: 'User',
-        tableName: 'users', // Explicitly define table name
         timestamps: true, // Enable createdAt and updatedAt
       }
     );

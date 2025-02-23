@@ -51,7 +51,6 @@ class Service
       {
         sequelize,
         modelName: 'Service',
-        tableName: 'services', // Explicitly define table name
         timestamps: true, // Enable createdAt and updatedAt
       }
     );

@@ -5,22 +5,20 @@
     "database": "call",
     "host": "localhost",
     "dialect": "mysql",
-    "logging": false
+    "logging":false
   },
   "test": {
-    "username": "root",
-    "password": "",
-    "database": "call",
+    "username": "node900",
+    "password": "RerWxx9RRp8Ap",
+    "database": "node900",
     "host": "localhost",
-    "dialect": "mysql",
-    "logging": false
+    "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "",
-    "database": "call",
+    "username": "node900",
+    "password": "RerWxx9RRp8Ap",
+    "database": "node900",
     "host": "localhost",
-    "dialect": "mysql",
-    "logging": false
+    "dialect": "mysql"
   }
 }

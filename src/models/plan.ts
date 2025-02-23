@@ -76,7 +76,6 @@ class Plan extends Model<PlanAttributes, PlanCreationAttributes> implements Plan
       {
         sequelize,
         modelName: 'Plan',
-        tableName: 'Plans',
         timestamps: true,
       }
     );

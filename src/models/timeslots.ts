@@ -69,7 +69,6 @@ class TimeSlots extends Model<TimeSlotsAttributes, TimeSlotsCreationAttributes> 
       {
         sequelize,
         modelName: 'TimeSlots',
-        tableName: 'timeslots',
         timestamps: true,
       }
     );
