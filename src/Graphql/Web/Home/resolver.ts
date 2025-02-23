@@ -9,6 +9,7 @@ const Home: IResolvers<any, any> = {
                 attributes: [
                     'id',
                     'name',
+                    'handler',
                     'image',
                     'description',
                 ],
@@ -31,6 +32,7 @@ const Home: IResolvers<any, any> = {
                 {
                     id: category.id,
                     name: category.name,
+                    handler:category.handler,
                     image: category.image,
                     description: category.description,
                     ads: category.ads.map((ad: any) => (
