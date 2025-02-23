@@ -12,8 +12,6 @@ scalar Upload
     price: Int
     email: String
     category: String
-    category_handler:String,
-    city_handler:String,
     categoryId: Int
     city: String
     state: String
@@ -85,6 +83,8 @@ scalar Upload
   }
   input AdsFilter {
     categoryId:Int ,
+    category_handler:String,
+    city_handler:String,
     state:String,
     city:String,
     ethnicity:String , 
