@@ -576,6 +576,7 @@ module.exports = {
     const citiesToInsert = city.flatMap(state => {
       return state.cities.map(cityName => ({
         name: cityName,
+        handler:cityName.toLowerCase().replace(/\s+/g, "-"),
         stateId: state.stateId,
         createdAt: new Date(),
         updatedAt: new Date(),
