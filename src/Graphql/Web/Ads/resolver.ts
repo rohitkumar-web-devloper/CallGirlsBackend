@@ -356,7 +356,7 @@ const Ads: IResolvers<any, any> = {
       }
       let fileUrls = await MultipleFileUpload(data.profile, 'Ads');
 
-      const result: any = await db.Ads.create({ ...data.input, city_handler:formatString(data.city) ,category_handler:formatString(data.category), createdById: user.id, createdByName: user.name, profile: fileUrls });
+      const result: any = await db.Ads.create({ ...data.input, city_handler:formatString(data.input.city) ,category_handler:formatString(data.input.category), createdById: user.id, createdByName: user.name, profile: fileUrls });
       for (let i = 0; i < data.input.services.length; i++) {
         await db.Service.create({ adId: result.id, name: data.input.services[i] })
       }
