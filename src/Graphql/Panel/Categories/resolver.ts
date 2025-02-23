@@ -64,7 +64,6 @@ const Categories: IResolvers<any, any> = {
             const exist = await db.Categories.findOne({
                 where: {
                     name: data.name,
-
                 }
             })
             if (exist)

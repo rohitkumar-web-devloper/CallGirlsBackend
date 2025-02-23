@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
+import {HOST} from "./constants/Variables";
 
-const SERVER_URL = "https://node.lustloungh.com";
 
 export const saveFileToServer = async (
   createReadStream: any,
@@ -21,7 +21,7 @@ export const saveFileToServer = async (
   }
 
   const filePath = path.join(folderPath, filename);
-  const fileUrl = `${SERVER_URL}/uploads/${folder}/${filename}`;
+  const fileUrl = `${HOST}/uploads/${folder}/${filename}`;
 
   return new Promise((resolve, reject) => {
     const stream = createReadStream();
