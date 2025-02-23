@@ -64,7 +64,7 @@ const Categories: IResolvers<any, any> = {
             const exist = await db.Categories.findOne({
                 where: {
                     name: data.name,
-                    handler : formatString(data.name)
+
                 }
             })
             if (exist)
@@ -80,7 +80,7 @@ const Categories: IResolvers<any, any> = {
                     throw new ApolloError("Error uploading file", "FILE_UPLOAD_ERROR");
                 }
             }
-            const category = await db.Categories.create({ ...data, image: profileUrl, createdById: user.id, createdByName: user.name });
+            const category = await db.Categories.create({ ...data, image: profileUrl, handler : formatString(data.name),createdById: user.id, createdByName: user.name });
             return { ...category.dataValues, message: 'Category Created', success: true };
         },
         updateCategories: async (_: any, data: CategoriesAttributes, context: any) => {
