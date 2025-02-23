@@ -12,6 +12,8 @@ scalar Upload
     price: Int
     email: String
     category: String
+    category_handler:String,
+    city_handler:String,
     categoryId: Int
     city: String
     state: String
