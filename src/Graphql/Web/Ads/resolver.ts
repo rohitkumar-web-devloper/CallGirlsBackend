@@ -83,6 +83,20 @@ const Ads: IResolvers<any, any> = {
           categoryId: filter.categoryId
         }
       }
+      if (filter.name) {
+        whereCondition = {
+          ...whereCondition,
+          title: { [Op.like]: `%${filter.search}%` }
+        };
+      }
+
+      if (filter.mobile) {
+        whereCondition = {
+          ...whereCondition,
+          mobileNumber: { [Op.like]: `%${filter.search}%` },
+          whatsAppNumber: { [Op.like]: `%${filter.search}%` }
+        };
+      }
       if (filter.category_handler) {
         whereCondition = {
           ...whereCondition,
