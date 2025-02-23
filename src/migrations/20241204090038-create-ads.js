@@ -34,10 +34,16 @@ module.exports = {
       category: {
         type: Sequelize.STRING
       },
+      category_handler: {
+        type: Sequelize.STRING
+      },
       categoryId: {
         type: Sequelize.INTEGER
       },
       city: {
+        type: Sequelize.STRING
+      },
+      city_handler: {
         type: Sequelize.STRING
       },
       state: {

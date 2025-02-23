@@ -7,6 +7,7 @@ import { ApolloError, UserInputError } from "apollo-server-express";
 import { Op, Sequelize } from "sequelize";
 import moment from 'moment';
 import { log } from "node:console";
+import {formatString} from "../../../helpers";
 const Ads: IResolvers<any, any> = {
   Upload: GraphQLUpload,
   Query: {
@@ -80,6 +81,18 @@ const Ads: IResolvers<any, any> = {
         whereCondition = {
           ...whereCondition,
           categoryId: filter.categoryId
+        }
+      }
+      if (filter.category_handler) {
+        whereCondition = {
+          ...whereCondition,
+          category_handler: filter.category_handler
+        }
+      }
+      if (filter.city_handler) {
+        whereCondition = {
+          ...whereCondition,
+          city_handler: filter.city_handler
         }
       }
       if (filter.state) {
@@ -207,6 +220,18 @@ const Ads: IResolvers<any, any> = {
             categoryId: filter.categoryId
           }
         }
+        if (filter.category_handler) {
+          whereCondition = {
+            ...whereCondition,
+            category_handler: filter.category_handler
+          }
+        }
+        if (filter.city_handler) {
+          whereCondition = {
+            ...whereCondition,
+            city_handler: filter.city_handler
+          }
+        }
         if (filter.state) {
           whereCondition = {
             ...whereCondition,
@@ -331,7 +356,7 @@ const Ads: IResolvers<any, any> = {
       }
       let fileUrls = await MultipleFileUpload(data.profile, 'Ads');
 
-      const result: any = await db.Ads.create({ ...data.input, createdById: user.id, createdByName: user.name, profile: fileUrls });
+      const result: any = await db.Ads.create({ ...data.input, city_handler:formatString(data.city) ,category_handler:formatString(data.category), createdById: user.id, createdByName: user.name, profile: fileUrls });
       for (let i = 0; i < data.input.services.length; i++) {
         await db.Service.create({ adId: result.id, name: data.input.services[i] })
       }
