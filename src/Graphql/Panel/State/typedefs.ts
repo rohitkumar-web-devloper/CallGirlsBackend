@@ -11,6 +11,7 @@ scalar DateTime
   type City {
     id: ID
     name: String
+    handler:String
     stateId: ID
     createdAt: DateTime
     updatedAt: DateTime
